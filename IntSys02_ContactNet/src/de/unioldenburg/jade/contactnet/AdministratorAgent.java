@@ -6,10 +6,15 @@
 
 package de.unioldenburg.jade.contactnet;
 
+import jade.core.Agent;
+
 /**
  *
  * @author ckuepker
  */
-public class AdministratorAgent {
+public class AdministratorAgent extends Agent {
 
+    protected void setup() {
+        System.out.println("AdministratorAgent started");
+    }
 }

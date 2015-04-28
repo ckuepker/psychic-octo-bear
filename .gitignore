@@ -1,5 +1,6 @@
 **/bin
-**/lib
+**/lib/*.jar
 **/.classpath
 **/.project
 /IntSys02_ContactNet/nbproject/private/
+/IntSys02_ContactNet/build/
