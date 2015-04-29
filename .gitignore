@@ -2,5 +2,7 @@
 **/lib/*.jar
 **/.classpath
 **/.project
-/IntSys02_ContactNet/nbproject/private/
-/IntSys02_ContactNet/build/
+/IntSys02_ContractNet/nbproject/private/
+/IntSys02_ContractNet/build/
+/IntSys02_ContractNet/APDescription.txt
+/IntSys02_ContractNet/MTPs-Main-Container.txt
