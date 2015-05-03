@@ -44,8 +44,8 @@ public class ContractNet {
         try {
             AgentController agent = container.createNewAgent("admin" , Administrator.class.getName(), args);
             agent.start();
-            
-            for(int i=1; i<4; i++) {
+             
+            for(int i=0; i<3; i++) {
                 agent = container.createNewAgent("participant"+i, Participant.class.getName(), args);
                 agent.start();
             }

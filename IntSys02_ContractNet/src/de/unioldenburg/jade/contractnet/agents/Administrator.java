@@ -6,7 +6,11 @@
 
 package de.unioldenburg.jade.contractnet.agents;
 
+import de.unioldenburg.jade.contractnet.behaviours.WaitForMessageBehaviour;
+import de.unioldenburg.jade.contractnet.messages.ParticipantListMessage;
+import jade.core.AID;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,28 +20,58 @@ import java.util.Set;
  */
 public class Administrator extends Agent {
     
-    private Set<Participant> participants;
-    private Participant auctioneer;
+    /**
+     * 
+     */
+    private class AdministratorMessageHandler extends WaitForMessageBehaviour {
+                
+        @Override
+        public void handleMessage(ACLMessage msg) {
+            if (msg.getContent().equals("ContractNet GO")) {
+                System.out.println("Administrator: Startup message found.\n\tInitiating broadcast to participants...");
+                send(new ParticipantListMessage(participants));
+                
+                ACLMessage startupBroadcast = new ACLMessage(ACLMessage.INFORM);
+                addAllParticipants(startupBroadcast);
+                startupBroadcast.setContent("init_auction");
+                send(startupBroadcast);
+                System.out.println("\tBroadcast send");
+                setDone(true);
+            } else if (msg.getContent().equals("register")) {
+                registerParticipant(msg.getSender().getLocalName());
+            }
+        }        
+    }
+    
+    public final static String ADMINISTRATOR_LOCAL_NAME = "admin";
+    
+    private Set<String> participants;
 
     @Override
     protected void setup() {
-        System.out.println("AdministratorAgent started");
+        System.out.println("Administrator: AdministratorAgent started");
         this.participants = new HashSet<>(3);
+        addBehaviour(new AdministratorMessageHandler());
     }
     
-    public void registerParticipant(Participant p) {
-        System.out.println("Registering Participant '"+p.getLocalName()+"' on "
+    public void registerParticipant(String participantName) {
+        System.out.println("Administrator: Registering '"+participantName+"' on "
                 +"Administrator");
-        this.participants.add(p);
+        this.participants.add(participantName);
         if (this.participants.size() == 1) {
-            System.out.println("Making newly registered Participant '"+p.getLocalName()
-                    +"' the auctioneer");
-            this.auctioneer = p;
-            p.setAuctioneer();
+            System.out.println("\tPromoting '"+participantName
+                    +"' to auctioneer");
+            ACLMessage makeAuctioneerMessage = new ACLMessage(ACLMessage.INFORM);
+            makeAuctioneerMessage.addReceiver(new AID(participantName, AID.ISLOCALNAME));
+            makeAuctioneerMessage.setContent("promote");
+            send(makeAuctioneerMessage);
         }
     }
     
-    public Participant getAuctioneer() {
-        return this.auctioneer;
+    private ACLMessage addAllParticipants(ACLMessage message) {
+        for (String participantLocalName : participants) {
+            message.addReceiver(new AID(participantLocalName,AID.ISLOCALNAME));
+        }
+        return message;
     }
 }
