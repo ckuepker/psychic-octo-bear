@@ -1,11 +1,10 @@
 package de.unioldenburg.jade.contractnet.data;
 
 import de.unioldenburg.jade.contractnet.agents.Participant;
-import de.unioldenburg.jade.contractnet.messages.JobMessage;
 import jade.lang.acl.ACLMessage;
 
 /**
- *
+ * Data structure for Jobs created by an auctioneer.
  * @author Christoph Küpker
  */
 public class Job {
@@ -19,6 +18,12 @@ public class Job {
         this.endtime = endtime;
     }
         
+    /**
+     * Tries to parse a Job from a given message by accessing user set 
+     * parameters with keys defined in Participant
+     * @param msg
+     * @return 
+     */
     public static Job parseJobFromMessage(ACLMessage msg) {
         String id = msg.getUserDefinedParameter(Participant.KEY_ID);
         int starttime = Integer.parseInt(msg.getUserDefinedParameter(Participant.KEY_START));

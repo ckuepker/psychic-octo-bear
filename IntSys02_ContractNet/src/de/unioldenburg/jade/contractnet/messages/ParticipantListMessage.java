@@ -5,7 +5,7 @@ import jade.lang.acl.ACLMessage;
 import java.util.Set;
 
 /**
- *
+ * Message used to inform all participants about all participants.
  * @author Christoph Küpker
  */
 public class ParticipantListMessage extends ACLMessage {

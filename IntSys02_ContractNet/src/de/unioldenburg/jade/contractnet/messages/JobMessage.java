@@ -7,7 +7,8 @@ import jade.lang.acl.ACLMessage;
 import java.util.Set;
 
 /**
- *
+ * Message for offering a Job and requesting proposals (biddings) in an auction.
+ * Job id is stored in user set parameter of the message for later referal.
  * @author Christoph Küpker
  */
 public class JobMessage extends ACLMessage {

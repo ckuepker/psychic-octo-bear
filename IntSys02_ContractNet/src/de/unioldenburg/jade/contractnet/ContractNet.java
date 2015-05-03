@@ -16,11 +16,12 @@ public class ContractNet {
     
     /**
      * Main entry point to the MAS ContractNet which instantiates Agents and 
-     * registers participants on the administrator (in correct order).
+     * registers participants on the administrator (in correct order). As given
+     * in the StudIP forum. Number of participants can be changed in the for 
+     * loop.
      * @param args Not required
      */
     public static void main(String[] args) {
-        // As given in StudIP-Forum
         String host;
         int port;
         String platform = null; // default name
@@ -44,7 +45,8 @@ public class ContractNet {
         try {
             AgentController agent = container.createNewAgent("admin" , Administrator.class.getName(), args);
             agent.start();
-             
+            
+            // MAS will work even if names or count of participants are changed
             for(int i=0; i<3; i++) {
                 agent = container.createNewAgent("participant"+i, Participant.class.getName(), args);
                 agent.start();

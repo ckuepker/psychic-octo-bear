@@ -4,7 +4,8 @@ import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
 
 /**
- *
+ * Base class for convenience handling of incoming messages. Subclasses must 
+ * implement handleMessage() to define how messages will be treated.
  * @author Christoph Küpker
  */
 public abstract class WaitForMessageBehaviour extends Behaviour {
