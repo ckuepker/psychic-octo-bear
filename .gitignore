@@ -1,9 +1,9 @@
 **/bin
 **/lib/*.jar
 **/.classpath
-**/.project
-/IntSys02_ContractNet/nbproject/private/
-/IntSys02_ContractNet/build/
-/IntSys02_ContractNet/APDescription.txt
-/IntSys02_ContractNet/MTPs-Main-Container.txt
-/IntSys02_ContractNet/dist/
+/.project
+**/nbproject/private/
+**/build/
+**/APDescription.txt
+**/MTPs-Main-Container.txt
+**/dist/
