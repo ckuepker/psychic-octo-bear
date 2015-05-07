@@ -1,6 +1,6 @@
 package de.unioldenburg.jade.contractnet.agents;
 
-import de.unioldenburg.jade.contractnet.behaviours.WaitForMessageBehaviour;
+import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
 import de.unioldenburg.jade.contractnet.data.Job;
 import de.unioldenburg.jade.contractnet.messages.JobMessage;
 import jade.core.AID;

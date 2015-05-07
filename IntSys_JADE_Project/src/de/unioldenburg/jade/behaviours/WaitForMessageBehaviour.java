@@ -1,4 +1,4 @@
-package de.unioldenburg.jade.contractnet.behaviours;
+package de.unioldenburg.jade.behaviours;
 
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;

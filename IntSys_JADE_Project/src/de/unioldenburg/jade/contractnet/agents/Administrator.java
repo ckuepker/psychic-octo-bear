@@ -6,7 +6,7 @@
 
 package de.unioldenburg.jade.contractnet.agents;
 
-import de.unioldenburg.jade.contractnet.behaviours.WaitForMessageBehaviour;
+import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
 import de.unioldenburg.jade.contractnet.messages.ParticipantListMessage;
 import jade.core.AID;
 import jade.core.Agent;
