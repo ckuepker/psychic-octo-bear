@@ -17,7 +17,7 @@ public class RegistrationServiceBehaviour extends WaitForMessageBehaviour {
     public static final int REGISTRATION_REQUEST_PERFORMATIVE = ACLMessage.REQUEST;
     public static final String REGISTRATION_REQUEST_CONTENT = "register";
     
-    private Set<String> registeredLocalNames = new HashSet<>();
+    private Set<String> registeredLocalNames = new HashSet<String>();
     
     @Override
     public void handleMessage(ACLMessage m) {
