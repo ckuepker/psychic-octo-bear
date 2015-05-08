@@ -13,6 +13,6 @@ public class MauMau {
     
     public static void main(String[] args) {
         AdministratedMASStarter.startMAS(Dealer.class, Dealer.DEALER_LOCAL_NAME, 
-                Player.class, 4, "player", true);
+                Player.class, 3, "player", false);
     }
 }

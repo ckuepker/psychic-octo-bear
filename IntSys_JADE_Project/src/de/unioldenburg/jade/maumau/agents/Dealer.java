@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Stack;
 
 import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
-import jade.domain.introspection.IntrospectionVocabulary;
 
 /**
  *
@@ -64,7 +63,7 @@ public class Dealer extends Agent {
         public void handleMessage(ACLMessage msg) {
             if (msg.getContent().equals("register")) {
                 registerPlayer(msg.getSender().getLocalName());
-                if (players.size() == 4) {
+                if (players.size() == 3) {
                     startGame();
                 }
             } else if (msg.getContent().equals("draw")) {
@@ -266,7 +265,7 @@ public class Dealer extends Agent {
         nextTurnMsg.setContent("next" + openCards.get(openCards.size() - 1));
         AID nextPlayer = new AID(getNextPlayer(msg.getSender().getLocalName()), AID.ISLOCALNAME);
         nextTurnMsg.addReceiver(nextPlayer);
-        if ((this.numberOfTurns % 4) == 0) {
+        if ((this.numberOfTurns % players.size()) == 0) {
             System.out.println();
             System.out.println(this.getLocalName() + ": ----- Round " + ((this.numberOfTurns / 4) + 1) + " -----");
         }
