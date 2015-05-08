@@ -62,25 +62,11 @@ public class Dealer extends Agent {
 
         @Override
         public void handleMessage(ACLMessage msg) {
-            if (msg.getContent().equals("start game")) {
-//				send(new PlayerListMessage(players));
-                initDeck();
-                distributeCards();
-                //Turn the upper card of the deck as beginning card
-                openCards = new Stack<String>();
-                openCards.add(deck.pop());
-                System.out.println();
-                System.out.println(getLocalName() + ": ----- Round 1 -----");
-                System.out.println(getLocalName() + ": First Card is " + openCards.get(openCards.size() - 1));
-                //Send Message to first player to execute his turn. Message contains the upper card of the open cards
-                ACLMessage starterMsg = new ACLMessage(ACLMessage.INFORM);
-                starterMsg.setContent("next" + openCards.get(openCards.size() - 1));
-                AID firstPlayer = new AID(players.get(0), AID.ISLOCALNAME);
-                System.out.println(getLocalName() + ": " + firstPlayer.getLocalName() + " starts the game");
-                starterMsg.addReceiver(firstPlayer);
-                send(starterMsg);
-            } else if (msg.getContent().equals("register")) {
+            if (msg.getContent().equals("register")) {
                 registerPlayer(msg.getSender().getLocalName());
+                if (players.size() == 4) {
+                    startGame();
+                }
             } else if (msg.getContent().equals("draw")) {
                 numberOfTurns++;
                 distributeOneCard(msg.getSender().getLocalName());
@@ -109,6 +95,24 @@ public class Dealer extends Agent {
                 }
 
             }
+        }
+
+        private void startGame() {
+            initDeck();
+            distributeCards();
+            //Turn the upper card of the deck as beginning card
+            openCards = new Stack<String>();
+            openCards.add(deck.pop());
+            System.out.println();
+            System.out.println(getLocalName() + ": ----- Round 1 -----");
+            System.out.println(getLocalName() + ": First Card is " + openCards.get(openCards.size() - 1));
+            //Send Message to first player to execute his turn. Message contains the upper card of the open cards
+            ACLMessage starterMsg = new ACLMessage(ACLMessage.INFORM);
+            starterMsg.setContent("next" + openCards.get(openCards.size() - 1));
+            AID firstPlayer = new AID(players.get(0), AID.ISLOCALNAME);
+            System.out.println(getLocalName() + ": " + firstPlayer.getLocalName() + " starts the game");
+            starterMsg.addReceiver(firstPlayer);
+            send(starterMsg);
         }
     }
 
@@ -153,7 +157,7 @@ public class Dealer extends Agent {
      */
     private void distributeCards() {
         System.out.println(getLocalName() + ": Distributing Cards");
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 5; i++) {
             for (String playerLocalName : this.players) {
                 this.distributeOneCard(playerLocalName);
             }
