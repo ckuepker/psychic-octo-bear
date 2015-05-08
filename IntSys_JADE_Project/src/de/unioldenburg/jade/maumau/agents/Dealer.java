@@ -17,6 +17,8 @@ import de.unioldenburg.jade.maumau.messages.PlayerListMessage;
  */
 public class Dealer extends Agent {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Local dealer name.
 	 */
@@ -49,23 +51,24 @@ public class Dealer extends Agent {
         this.addBehaviour(new DealerMessageHandler());
     }
     
-
-
     /**
      * Handles messages.
      * @author Armin Pistoor
      */
 	private class DealerMessageHandler extends WaitForMessageBehaviour {
 
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public void handleMessage(ACLMessage msg) {
 			if (msg.getContent().equals("start game")) {
-				send(new PlayerListMessage(players));
+//				send(new PlayerListMessage(players));
 				initDeck();
 				distributeCards();
 				//Turn the upper card of the deck as beginning card
 				openCards = new Stack<String>();
 				openCards.add(deck.pop());
+				System.out.println();
 				System.out.println(getLocalName() + ": ----- Round 1 -----");
 				System.out.println(getLocalName() + ": First Card is " + openCards.get(openCards.size() - 1));
 				//Send Message to first player to execute his turn. Message contains the upper card of the open cards
@@ -80,7 +83,6 @@ public class Dealer extends Agent {
 			} else if (msg.getContent().equals("draw")) {
 				numberOfTurns++;
 				distributeOneCard(msg.getSender().getLocalName());
-				System.out.println("open cards" + openCards);
 				setNextPlayersTurn(msg);
 			} else if (msg.getContent().equals("win")) {
 				System.out.println(getLocalName() + ": " + msg.getSender().getLocalName() + " won the game!");
@@ -137,7 +139,7 @@ public class Dealer extends Agent {
      */
     private void distributeCards() {
     	System.out.println(getLocalName() + ": Distributing Cards");
-    	for (int i = 0; i < 7; i++) {
+    	for (int i = 0; i < 6; i++) {
     		for (String playerLocalName : this.players) {
 				this.distributeOneCard(playerLocalName);
     		}			
@@ -150,7 +152,11 @@ public class Dealer extends Agent {
      */
     private void distributeOneCard(String playerLocalName) {
 		//Send Message with Card to player
-    	reshuffleIfDeckEmpty();
+    	try {
+			reshuffleIfDeckEmpty();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		ACLMessage newCardMsg = new ACLMessage(ACLMessage.INFORM);
 		newCardMsg.setContent("distCard" + this.deck.pop());
 		newCardMsg.addReceiver(new AID(playerLocalName,AID.ISLOCALNAME));
@@ -207,20 +213,22 @@ public class Dealer extends Agent {
     /**
      * Checks if the deck is empty.
      * @author Armin Pistoor
+     * @throws Exception 
      */
-    private void reshuffleIfDeckEmpty() {
+    private void reshuffleIfDeckEmpty() throws Exception {
     	if (this.deck.size() == 0) {
-    		System.out.println("_______________________________________________" + this.getLocalName() + ": No more cards in deck! Shuffling open cards for a new deck");
+    		if ((this.deck.size() + this.openCards.size()) < 2) {
+        		throw new Exception("Game over! No more cards to distribute!");
+        	}
+    		System.out.println(this.getLocalName() + ": No more cards in deck! Shuffling open cards for a new deck");
     		String upperCard = this.openCards.pop();
-    		this.deck = this.openCards;
+    		for (String card : this.openCards) {
+				this.deck.add(card);
+			}
     		Collections.shuffle(deck);
-    		System.out.println("uppercard: " + upperCard);
     		openCards.clear();
     		openCards.add(upperCard);
-    		System.out.println("asdasd" + openCards.get(openCards.size() - 1));
-    		System.out.println("_________________________________________" + openCards.size());
-    		System.out.println("open cards reshuffleIfDeckEmpty " + openCards);
-    	}
+        }
     }
 
     /**
@@ -230,12 +238,11 @@ public class Dealer extends Agent {
      */
 	private void setNextPlayersTurn(ACLMessage msg) {
 		ACLMessage nextTurnMsg = new ACLMessage(ACLMessage.INFORM);
-		System.out.println("open cards setNextPlayersTurn" + openCards);
-		System.out.println("size" + openCards.get(openCards.size() - 1));
 		nextTurnMsg.setContent("next" + openCards.get(openCards.size() - 1));
 		AID nextPlayer = new AID(getNextPlayer(msg.getSender().getLocalName()), AID.ISLOCALNAME);
 		nextTurnMsg.addReceiver(nextPlayer);
 		if ((this.numberOfTurns % 4) == 0) {
+			System.out.println();
 			System.out.println(this.getLocalName() + ": ----- Round " + ((this.numberOfTurns/4) + 1) + " -----");			
 		}
 		System.out.println(getLocalName() + ": It's " + nextPlayer.getLocalName() + "s turn. " + 

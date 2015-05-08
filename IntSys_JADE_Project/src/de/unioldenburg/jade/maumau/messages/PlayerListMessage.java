@@ -11,7 +11,9 @@ import java.util.ArrayList;
  */
 public class PlayerListMessage extends ACLMessage {
     
-    public PlayerListMessage(ArrayList<String> playerList) {
+	private static final long serialVersionUID = 1L;
+
+	public PlayerListMessage(ArrayList<String> playerList) {
         setPerformative(INFORM);
         System.out.println("Preparing player list broadcast");
         setContent("player:" + playerList.toString());

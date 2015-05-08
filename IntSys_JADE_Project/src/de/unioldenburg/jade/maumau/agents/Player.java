@@ -1,18 +1,20 @@
 package de.unioldenburg.jade.maumau.agents;
 
-import java.util.ArrayList;
-
-import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
-import de.unioldenburg.jade.contractnet.agents.Administrator;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+
+import java.util.ArrayList;
+
+import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
 
 /**
  *
  * @author Christoph Küpker
  */
 public class Player extends Agent {
+	
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * the hand cards.
@@ -33,6 +35,8 @@ public class Player extends Agent {
     }
     
     private class PlayerMessageHandler extends WaitForMessageBehaviour {
+
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void handleMessage(ACLMessage msg) {
