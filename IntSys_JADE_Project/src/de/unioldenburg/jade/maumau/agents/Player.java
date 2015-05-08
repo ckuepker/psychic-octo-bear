@@ -62,6 +62,7 @@ public class Player extends Agent {
     			this.handCards.remove(i);
 				System.out.println(this.getLocalName() + ": playing card " + playedCard + "! " + handCards.size() + " cards left");
     			if (this.handCards.size() == 0) {
+    				System.out.println(this.getLocalName() + ": Mau-Mau!");
     				ACLMessage winningMsg = new ACLMessage(ACLMessage.INFORM);
     				winningMsg.setContent("win");
     				winningMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME, AID.ISLOCALNAME));
