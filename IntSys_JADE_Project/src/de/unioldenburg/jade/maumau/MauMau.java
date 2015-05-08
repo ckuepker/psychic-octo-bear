@@ -12,7 +12,7 @@ import de.unioldenburg.jade.starter.AdministratedMASStarter;
 public class MauMau {
     
     public static void main(String[] args) {
-        AdministratedMASStarter.startMAS(Dealer.class, "dealer", Player.class, 
-                4, "player", true);
+        AdministratedMASStarter.startMAS(Dealer.class, Dealer.DEALER_LOCAL_NAME, 
+                Player.class, 4, "player", true);
     }
 }
