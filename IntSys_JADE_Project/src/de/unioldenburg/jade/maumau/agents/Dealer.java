@@ -15,6 +15,10 @@ import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
  * @author Christoph Küpker
  */
 public class Dealer extends Agent {
+    
+    public static final String REGISTER_MESSAGE_CONTENT = "register",
+                DRAW_MESSAGE_CONTENT = "draw",
+                WIN_MESSAGE_CONTENT = "win";
 
     private static final long serialVersionUID = 1L;
 
@@ -61,16 +65,16 @@ public class Dealer extends Agent {
 
         @Override
         public void handleMessage(ACLMessage msg) {
-            if (msg.getContent().equals("register")) {
+            if (msg.getContent().equals(REGISTER_MESSAGE_CONTENT)) {
                 registerPlayer(msg.getSender().getLocalName());
                 if (players.size() == 3) {
                     startGame();
                 }
-            } else if (msg.getContent().equals("draw")) {
+            } else if (msg.getContent().equals(DRAW_MESSAGE_CONTENT)) {
                 numberOfTurns++;
                 distributeOneCard(msg.getSender().getLocalName());
                 setNextPlayersTurn(msg);
-            } else if (msg.getContent().equals("win")) {
+            } else if (msg.getContent().equals(WIN_MESSAGE_CONTENT)) {
                 System.out.println(getLocalName() + ": " + msg.getSender().getLocalName() + " won the game!");
                 ACLMessage gameoverMessage = new ACLMessage(ACLMessage.INFORM);
                 for (String localName : players) {
@@ -78,7 +82,7 @@ public class Dealer extends Agent {
                         gameoverMessage.addReceiver(new AID(localName, AID.ISLOCALNAME));
                     }
                 }
-                gameoverMessage.setContent("gameover");
+                gameoverMessage.setContent(Player.GAMEOVER_MESSAGE_CONTENT);
                 send(gameoverMessage);
                 //shutdown
                 System.out.println(getLocalName()+": Shutting down.. Goodbye");
@@ -107,7 +111,8 @@ public class Dealer extends Agent {
             System.out.println(getLocalName() + ": First Card is " + openCards.get(openCards.size() - 1));
             //Send Message to first player to execute his turn. Message contains the upper card of the open cards
             ACLMessage starterMsg = new ACLMessage(ACLMessage.INFORM);
-            starterMsg.setContent("next" + openCards.get(openCards.size() - 1));
+            starterMsg.setContent(Player.NEXT_MESSAGE_CONTENT 
+                    + openCards.get(openCards.size() - 1));
             AID firstPlayer = new AID(players.get(0), AID.ISLOCALNAME);
             System.out.println(getLocalName() + ": " + firstPlayer.getLocalName() + " starts the game");
             starterMsg.addReceiver(firstPlayer);
@@ -176,7 +181,8 @@ public class Dealer extends Agent {
             e.printStackTrace();
         }
         ACLMessage newCardMsg = new ACLMessage(ACLMessage.INFORM);
-        newCardMsg.setContent("distCard" + this.deck.pop());
+        newCardMsg.setContent(Player.DISTRIBUTE_CARD_MESSAGE_CONTENT 
+                + this.deck.pop());
         newCardMsg.addReceiver(new AID(playerLocalName, AID.ISLOCALNAME));
         send(newCardMsg);
     }
@@ -188,7 +194,8 @@ public class Dealer extends Agent {
      */
     private boolean validateCard(String card) {
         boolean valid = false;
-        if (card.charAt(0) == openCards.get(openCards.size() - 1).charAt(0) || card.charAt(1) == openCards.get(openCards.size() - 1).charAt(1)) {
+        if (card.charAt(0) == openCards.get(openCards.size() - 1).charAt(0) 
+                || card.charAt(1) == openCards.get(openCards.size() - 1).charAt(1)) {
             valid = true;
         }
         return valid;
@@ -205,7 +212,7 @@ public class Dealer extends Agent {
                 + playerLocalName + " and he will receive a penalty card!");
         //Return invalid card
         ACLMessage invalidCardMsg = new ACLMessage(ACLMessage.INFORM);
-        invalidCardMsg.setContent("distCard" + card);
+        invalidCardMsg.setContent(Player.DISTRIBUTE_CARD_MESSAGE_CONTENT + card);
         invalidCardMsg.addReceiver(new AID(playerLocalName, AID.ISLOCALNAME));
         send(invalidCardMsg);
         //Distribute penalty card
@@ -262,7 +269,7 @@ public class Dealer extends Agent {
      */
     private void setNextPlayersTurn(ACLMessage msg) {
         ACLMessage nextTurnMsg = new ACLMessage(ACLMessage.INFORM);
-        nextTurnMsg.setContent("next" + openCards.get(openCards.size() - 1));
+        nextTurnMsg.setContent(Player.NEXT_MESSAGE_CONTENT + openCards.get(openCards.size() - 1));
         AID nextPlayer = new AID(getNextPlayer(msg.getSender().getLocalName()), AID.ISLOCALNAME);
         nextTurnMsg.addReceiver(nextPlayer);
         if ((this.numberOfTurns % players.size()) == 0) {
