@@ -16,9 +16,11 @@ public class Player extends Agent {
 
     private static final long serialVersionUID = 1L;
     
-    public static String DISTRIBUTE_CARD_MESSAGE_CONTENT = "distCard",
+    public static final String DISTRIBUTE_CARD_MESSAGE_CONTENT = "distCard",
             NEXT_MESSAGE_CONTENT = "next",
             GAMEOVER_MESSAGE_CONTENT = "gameover";
+    
+    public static final String PLAYER_LOCAL_NAME_PREFIX = "player";
     
 
     /**

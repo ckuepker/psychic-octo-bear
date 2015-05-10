@@ -7,13 +7,14 @@ import java.util.ArrayList;
 
 /**
  * Message used to inform all participants about all participants.
- * @author Christoph Küpker // customized by Armin Pistoor
+ *
+ * @author Armin Pistoor
  */
 public class PlayerListMessage extends ACLMessage {
-    
-	private static final long serialVersionUID = 1L;
 
-	public PlayerListMessage(ArrayList<String> playerList) {
+    private static final long serialVersionUID = 1L;
+
+    public PlayerListMessage(ArrayList<String> playerList) {
         setPerformative(INFORM);
         System.out.println("Preparing player list broadcast");
         setContent("player:" + playerList.toString());

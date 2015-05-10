@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
+import de.unioldenburg.jade.maumau.MauMau;
 
 /**
  *
@@ -67,7 +68,7 @@ public class Dealer extends Agent {
         public void handleMessage(ACLMessage msg) {
             if (msg.getContent().equals(REGISTER_MESSAGE_CONTENT)) {
                 registerPlayer(msg.getSender().getLocalName());
-                if (players.size() == 3) {
+                if (players.size() == MauMau.PLAYER_COUNT) {
                     startGame();
                 }
             } else if (msg.getContent().equals(DRAW_MESSAGE_CONTENT)) {
@@ -106,13 +107,12 @@ public class Dealer extends Agent {
             //Turn the upper card of the deck as beginning card
             openCards = new Stack<String>();
             openCards.add(deck.pop());
-            System.out.println();
-            System.out.println(getLocalName() + ": ----- Round 1 -----");
+            System.out.println("\n"+getLocalName() + ": ----- Round 1 -----");
             System.out.println(getLocalName() + ": First Card is " + openCards.get(openCards.size() - 1));
             //Send Message to first player to execute his turn. Message contains the upper card of the open cards
             ACLMessage starterMsg = new ACLMessage(ACLMessage.INFORM);
             starterMsg.setContent(Player.NEXT_MESSAGE_CONTENT 
-                    + openCards.get(openCards.size() - 1));
+                    + openCards.peek());
             AID firstPlayer = new AID(players.get(0), AID.ISLOCALNAME);
             System.out.println(getLocalName() + ": " + firstPlayer.getLocalName() + " starts the game");
             starterMsg.addReceiver(firstPlayer);
@@ -126,7 +126,8 @@ public class Dealer extends Agent {
      * @param playerName - local name of the player
      */
     private void registerPlayer(String playerName) {
-        System.out.println(getLocalName() + ": Registering '" + playerName + "' on " + "Dealer");
+        System.out.println(getLocalName() + ": Registering '" + playerName 
+                + "' on Dealer");
         this.players.add(playerName);
     }
 
@@ -274,7 +275,7 @@ public class Dealer extends Agent {
         nextTurnMsg.addReceiver(nextPlayer);
         if ((this.numberOfTurns % players.size()) == 0) {
             System.out.println();
-            System.out.println(this.getLocalName() + ": ----- Round " + ((this.numberOfTurns / 4) + 1) + " -----");
+            System.out.println(this.getLocalName() + ": ----- Round " + ((this.numberOfTurns / players.size()) + 1) + " -----");
         }
         System.out.println(getLocalName() + ": It's " + nextPlayer.getLocalName() + "s turn. "
                 + "The upper card is " + openCards.get(openCards.size() - 1));

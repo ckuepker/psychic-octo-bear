@@ -11,8 +11,10 @@ import de.unioldenburg.jade.starter.AdministratedMASStarter;
  */
 public class MauMau {
     
+    public static final int PLAYER_COUNT = 3;
+    
     public static void main(String[] args) {
         AdministratedMASStarter.startMAS(Dealer.class, Dealer.DEALER_LOCAL_NAME, 
-                Player.class, 3, "player", false);
+                Player.class, PLAYER_COUNT, Player.PLAYER_LOCAL_NAME_PREFIX, false);
     }
 }
