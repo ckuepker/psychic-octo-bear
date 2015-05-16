@@ -83,7 +83,6 @@ public class Player extends Agent {
 	 * @author Armin Pistoor
 	 */
 	private void executeTurn(String openCard, boolean exec) {
-		System.out.println("__________________________opencard: " + openCard);
 		SelectedCard playCard = this.getDefaultStrategy(openCard, exec);
 		// check playCard
 		if (!(playCard.getCard() == null)) {
@@ -123,60 +122,23 @@ public class Player extends Agent {
 	}
 
 	/**
-	 * Sends the played card to the dealer.
-	 * 
-	 * @param playedCard
-	 *            - the played card
-	 * @author Armin Pistoor
-	 */
-	private void sendFinishedMsg(String playedCard) {
-		ACLMessage finishedMsg = new ACLMessage(ACLMessage.PROPOSE);
-		finishedMsg.setContent(playedCard);
-		finishedMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
-				AID.ISLOCALNAME));
-		send(finishedMsg);
-	}
-
-	/**
 	 * Tries to play a seven or passes if none is in hand
 	 * 
 	 * @author ckuepker
 	 */
-	private SelectedCard reactToSeven() {
+	private SelectedCard reactToAttack(Character attackingCardCharacter) {
 		SelectedCard playCard = new SelectedCard();
 		for (String card : handCards) {
-			if (card.endsWith("7")) {
+			if (card.charAt(1) == attackingCardCharacter) {
 				handCards.remove(card);
 				playCard.setCard(card);
 				playCard.setMessage(getLocalName() + ": Playing " + card
-						+ " as " + "answer to the attacking 7");
+						+ " as " + "answer to the attacking "+attackingCardCharacter);
 				return playCard;
 			}
 		}
 		playCard.setCard(null);
-		playCard.setMessage(getLocalName() + ": Cannot defend from attacking 7");
-		return playCard;
-	}
-
-	/**
-	 * Tries to play an eight or misses his turn.
-	 * 
-	 * @author Armin Pistoor
-	 */
-	private SelectedCard reactToEight() {
-		SelectedCard playCard = new SelectedCard();
-		for (String card : this.handCards) {
-			if (card.endsWith("8")) {
-				handCards.remove(card);
-				playCard.setCard(card);
-				playCard.setMessage(this.getLocalName() + ": Playing " + card
-						+ " as answer to the attacking 8");
-				return playCard;
-			}
-		}
-		playCard.setCard(null);
-		playCard.setMessage(this.getLocalName()
-				+ ": Cannot defend from attacking 8");
+		playCard.setMessage(getLocalName() + ": Cannot defend from attacking "+attackingCardCharacter);
 		return playCard;
 	}
 
@@ -195,10 +157,8 @@ public class Player extends Agent {
             } else if (exec == true) {
                 char reactionIdentifier = openCard.charAt(1);
                 switch (reactionIdentifier) {
-                    case '7':
-                        return reactToSeven();
-                    case '8':
-                        return reactToEight();
+                    case '7': case '8':
+                        return reactToAttack(reactionIdentifier);
                     default:
                         throw new IllegalArgumentException("Cannot react to "
                                 + "given card " + openCard);
