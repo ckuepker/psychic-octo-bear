@@ -47,7 +47,9 @@ public class Dealer extends Agent {
     /**
      * Number of turns.
      */
-    private int numberOfTurns;
+    private int numberOfTurns = 0,
+            numberOfSevens = 0,
+            numberOfEights = 0;
 
     @Override
     protected void setup() {
@@ -74,7 +76,24 @@ public class Dealer extends Agent {
                 }
             } else if (msg.getContent().equals(DRAW_MESSAGE_CONTENT)) {
                 numberOfTurns++;
-                distributeOneCard(msg.getSender().getLocalName());
+                if (numberOfSevens > 0) {
+                    String sender = msg.getSender().getLocalName();
+                    int amount = 2*numberOfSevens;
+                    System.out.println(getLocalName()+": "+sender+" has to "
+                            + "take " + amount + " cards");
+                    for (int i = 0; i < amount; i++) {
+                        distributeOneCard(sender);
+                    }
+                    numberOfSevens = 0;
+                } else if (numberOfEights > 0) {
+                    // NOOP
+                    System.out.println(getLocalName()+": " + 
+                            msg.getSender().getLocalName()+" has to wait "
+                            + "one round");
+                    numberOfEights = 0;
+                } else {
+                    distributeOneCard(msg.getSender().getLocalName());
+                }
                 setNextPlayersTurn(msg);
             } else if (msg.getContent().equals(WIN_MESSAGE_CONTENT)) {
                 System.out.println(getLocalName() + ": " + msg.getSender().getLocalName() + " won the game!");
@@ -92,7 +111,13 @@ public class Dealer extends Agent {
             } else {
                 // Card played
                 numberOfTurns++;
-                openCards.add(msg.getContent());
+                String playedCard = msg.getContent();
+                openCards.add(playedCard);
+                if (playedCard.endsWith("7")) {
+                    numberOfSevens++;
+                } else if (playedCard.endsWith("8")) {
+                    numberOfEights++;
+                }
                 setNextPlayersTurn(msg);
             }
         }
@@ -252,7 +277,13 @@ public class Dealer extends Agent {
      */
     private void setNextPlayersTurn(ACLMessage msg) {
         ACLMessage nextTurnMsg = new ACLMessage(ACLMessage.INFORM);
-        nextTurnMsg.setContent(Player.NEXT_MESSAGE_CONTENT + openCards.get(openCards.size() - 1));
+        String identifier;
+        if (numberOfEights > 0 || numberOfSevens > 0) {
+            identifier = Player.NEXT_EXECUTE_CARD_CONTENT;
+        } else {
+            identifier = Player.NEXT_MESSAGE_CONTENT;
+        }
+        nextTurnMsg.setContent(identifier + openCards.get(openCards.size() - 1));
         AID nextPlayer = new AID(getNextPlayer(msg.getSender().getLocalName()), AID.ISLOCALNAME);
         nextTurnMsg.addReceiver(nextPlayer);
         if ((this.numberOfTurns % players.size()) == 0) {
