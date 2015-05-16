@@ -78,10 +78,10 @@ public class Player extends Agent {
                     switch (reactionIdentifier) {
                         case '7': 
                             reactToSeven();
-                            break;
+                            return;
                         case '8':
                             reactToEight();
-                            break;
+                            return;
                         default:
                             throw new IllegalArgumentException("Cannot react to "
                                     + "given card "+openCard);
