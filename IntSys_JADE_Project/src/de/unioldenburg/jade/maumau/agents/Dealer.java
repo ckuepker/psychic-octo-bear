@@ -125,6 +125,7 @@ public class Dealer extends Agent {
                 // Card played
                 numberOfTurns++;
                 String playedCard = msg.getContent();
+                broadcastPlayedCard(msg.getSender().getLocalName(),playedCard);
                 openCards.add(playedCard);
                 if (playedCard.endsWith("7")) {
                     numberOfSevens++;
@@ -313,5 +314,26 @@ public class Dealer extends Agent {
 	                + "The upper card is " + openCards.get(openCards.size() - 1));
         }
         send(nextTurnMsg);
+    }
+    
+    /**
+     * Informs all players about a card played and the player that played it.
+     * The player himself is not informed (again).
+     * @author Christoph Küpker
+     * @param playerLocalName Local name of the player that played the card
+     * @param card The played card
+     */
+    private void broadcastPlayedCard(String playerLocalName, String card) {
+        System.out.println(getLocalName()+": Informing players that " 
+                + playerLocalName + " played " + card);
+        ACLMessage broadcast = new ACLMessage(ACLMessage.INFORM);
+        broadcast.setContent(Player.PLAYED_CARD_MESSAGE_CONTENT_PREFIX 
+                + " " + playerLocalName + " " + card);
+        for (String player : players) {
+            if (!player.equals(playerLocalName)) {
+                broadcast.addReceiver(new AID(player, AID.ISLOCALNAME));
+            }
+        }
+        send(broadcast);
     }
 }

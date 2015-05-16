@@ -20,11 +20,12 @@ public class Player extends Agent {
 	private static final long serialVersionUID = 1L;
 
 	public static final String DISTRIBUTE_CARD_MESSAGE_CONTENT = "distCard",
-			NEXT_MESSAGE_CONTENT = "next",
-			GAMEOVER_MESSAGE_CONTENT = "gameover",
-			NEXT_EXECUTE_CARD_MESSAGE_CONTENT = "nextExec",
-			NEXT_WISHED_CARD_MESSAGE_CONTENT = "wished"
-			;
+                NEXT_MESSAGE_CONTENT = "next",
+                GAMEOVER_MESSAGE_CONTENT = "gameover",
+                NEXT_EXECUTE_CARD_MESSAGE_CONTENT = "nextExec",
+                NEXT_WISHED_CARD_MESSAGE_CONTENT = "wished",
+                PLAYED_CARD_MESSAGE_CONTENT_PREFIX = "played"
+                ;
 
 	public static final String PLAYER_LOCAL_NAME_PREFIX = "player";
 
