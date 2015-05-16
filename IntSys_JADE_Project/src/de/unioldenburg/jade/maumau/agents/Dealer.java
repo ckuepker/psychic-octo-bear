@@ -18,7 +18,7 @@ import de.unioldenburg.jade.maumau.MauMau;
 public class Dealer extends Agent {
     
     public static final String REGISTER_MESSAGE_CONTENT = "register",
-                DRAW_MESSAGE_CONTENT = "draw",
+                DRAW_MESSAGE_CONTENT = "pass",
                 WIN_MESSAGE_CONTENT = "win";
 
     private static final long serialVersionUID = 1L;
@@ -89,15 +89,10 @@ public class Dealer extends Agent {
                 System.out.println(getLocalName()+": Shutting down.. Goodbye");
                 doDelete();
             } else {
+                // Card played
                 numberOfTurns++;
-                //Must be a card to check
-                if (!validateCard(msg.getContent())) {
-                    punishPlayer(msg.getSender().getLocalName(), msg.getContent());
-                } else {
-                    openCards.add(msg.getContent());
-                    setNextPlayersTurn(msg);
-                }
-
+                openCards.add(msg.getContent());
+                setNextPlayersTurn(msg);
             }
         }
 
@@ -186,20 +181,6 @@ public class Dealer extends Agent {
                 + this.deck.pop());
         newCardMsg.addReceiver(new AID(playerLocalName, AID.ISLOCALNAME));
         send(newCardMsg);
-    }
-
-    /**
-     * Checks if the played card is valid.
-     *
-     * @author Armin Pistoor
-     */
-    private boolean validateCard(String card) {
-        boolean valid = false;
-        if (card.charAt(0) == openCards.get(openCards.size() - 1).charAt(0) 
-                || card.charAt(1) == openCards.get(openCards.size() - 1).charAt(1)) {
-            valid = true;
-        }
-        return valid;
     }
 
     /**
