@@ -18,7 +18,8 @@ public class Player extends Agent {
     
     public static final String DISTRIBUTE_CARD_MESSAGE_CONTENT = "distCard",
             NEXT_MESSAGE_CONTENT = "next",
-            GAMEOVER_MESSAGE_CONTENT = "gameover";
+            GAMEOVER_MESSAGE_CONTENT = "gameover",
+            NEXT_EXECUTE_CARD_CONTENT = "nextExec";
     
     public static final String PLAYER_LOCAL_NAME_PREFIX = "player";
     
@@ -49,8 +50,10 @@ public class Player extends Agent {
         public void handleMessage(ACLMessage msg) {
             if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
                 handCards.add(msg.getContent().substring(8));
+            } else if (msg.getContent().startsWith(NEXT_EXECUTE_CARD_CONTENT)) {
+                executeTurn(msg.getContent().substring(8), true);
             } else if (msg.getContent().startsWith(NEXT_MESSAGE_CONTENT)) {
-                executeTurn(msg.getContent().substring(4));
+                executeTurn(msg.getContent().substring(4), false);
             } else if (msg.getContent().equals(GAMEOVER_MESSAGE_CONTENT)) {
                 System.out.println(getLocalName()+": I lost :( Shutting down.. Goodbye");
                 doDelete();
@@ -63,12 +66,19 @@ public class Player extends Agent {
      * Puts a card on the openCards stack.
      *
      * @param openCard - the current upper card
+     * @param exec - true if the player needs to react to the card (example 7 and 8), 
+     * false if another player already executed the card
      * @author Armin Pistoor
      */
-    private void executeTurn(String openCard) {
+    private void executeTurn(String openCard, boolean exec) {
         boolean validCard = false;
         for (int i = 0; i < this.handCards.size(); i++) {
-            if (this.handCards.get(i).charAt(0) == openCard.charAt(0) 
+        	if (exec == true) {
+        		if (this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
+        			//doshit
+        		}
+        		
+        	} else if (this.handCards.get(i).charAt(0) == openCard.charAt(0) 
                     || this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
                 String playedCard = handCards.get(i);
                 this.handCards.remove(i);
