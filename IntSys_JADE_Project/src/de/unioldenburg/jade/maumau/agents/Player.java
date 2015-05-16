@@ -154,7 +154,26 @@ public class Player extends Agent {
         send(response);
     }
     
+    /**
+     * Tries to play an eight or misses his turn.
+     * @author Armin Pistoor
+     */
     private void reactToEight() {
-        // Search 8 or wait
+    	ACLMessage response = new ACLMessage(ACLMessage.PROPOSE);
+        response.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME, 
+                AID.ISLOCALNAME));
+        for (String card : this.handCards) {
+        	if (card.endsWith("8")) {
+        		System.out.println(this.getLocalName() + ": Playing " + card + " as answer to the attacking 8");
+        		handCards.remove(card);
+        		response.setContent(card);
+        		send(response);
+        		return;
+        	}
+			
+		}
+        System.out.println(this.getLocalName() + ": Cannot defend from attacking 8");
+        response.setContent(Dealer.MISS_TURN_MESSAGE_CONTENT);
+        send(response);
     }
 }
