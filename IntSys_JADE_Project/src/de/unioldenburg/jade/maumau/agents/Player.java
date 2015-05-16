@@ -214,7 +214,8 @@ public class Player extends Agent {
             }
         }
         if (jacks.size() > 0) {
-            playCard.setCard(this.handCards.get(jacks.get(0)));
+            int index = jacks.get(0);
+            playCard.setCard(this.handCards.remove(index));
             playCard.setJack(true);
             jacks.clear();
             String color = this.getWishingColor();
