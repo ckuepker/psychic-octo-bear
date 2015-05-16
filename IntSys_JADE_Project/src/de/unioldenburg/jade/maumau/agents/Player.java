@@ -173,7 +173,7 @@ public class Player extends Agent {
 			
 		}
         System.out.println(this.getLocalName() + ": Cannot defend from attacking 8");
-        response.setContent(Dealer.MISS_TURN_MESSAGE_CONTENT);
+        response.setContent(Dealer.DRAW_MESSAGE_CONTENT);
         send(response);
     }
 }
