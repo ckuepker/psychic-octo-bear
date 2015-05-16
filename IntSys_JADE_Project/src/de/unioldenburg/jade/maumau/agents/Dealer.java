@@ -18,7 +18,7 @@ import de.unioldenburg.jade.maumau.MauMau;
 public class Dealer extends Agent {
     
     public static final String REGISTER_MESSAGE_CONTENT = "register",
-                DRAW_MESSAGE_CONTENT = "draw",
+                DRAW_MESSAGE_CONTENT = "pass",
                 WIN_MESSAGE_CONTENT = "win";
 
     private static final long serialVersionUID = 1L;
