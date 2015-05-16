@@ -51,24 +51,28 @@ public class Player extends Agent {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public void handleMessage(ACLMessage msg) {
-			if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
-				handCards.add(msg.getContent().substring(8));
-			} else if (msg.getContent().startsWith(
-					NEXT_EXECUTE_CARD_MESSAGE_CONTENT)) {
-				executeTurn(msg.getContent().substring(8), true);
-			} else if (msg.getContent().startsWith(NEXT_MESSAGE_CONTENT)) {
-				executeTurn(msg.getContent().substring(4), false);
-			} else if (msg.getContent().startsWith(
-					NEXT_WISHED_CARD_MESSAGE_CONTENT)) {
-				executeTurn(msg.getContent().substring(6) + "0", false);
-				// executeWishedColorTurn(msg.getContent().substring(6));
-			} else if (msg.getContent().equals(GAMEOVER_MESSAGE_CONTENT)) {
-				System.out.println(getLocalName()
-						+ ": I lost :( Shutting down.. Goodbye");
-				doDelete();
-			}
-		}
+                public void handleMessage(ACLMessage msg) {
+                    if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
+                        String card = msg.getContent().substring(8);
+                        handCards.add(card);
+                        System.out.println(getLocalName() + ": Got card from "
+                                + "stack. Now holding " + handCards.size()
+                                + " cards in hand.");
+                    } else if (msg.getContent().startsWith(
+                            NEXT_EXECUTE_CARD_MESSAGE_CONTENT)) {
+                        executeTurn(msg.getContent().substring(8), true);
+                    } else if (msg.getContent().startsWith(NEXT_MESSAGE_CONTENT)) {
+                        executeTurn(msg.getContent().substring(4), false);
+                    } else if (msg.getContent().startsWith(
+                            NEXT_WISHED_CARD_MESSAGE_CONTENT)) {
+                        executeTurn(msg.getContent().substring(6) + "0", false);
+                        // executeWishedColorTurn(msg.getContent().substring(6));
+                    } else if (msg.getContent().equals(GAMEOVER_MESSAGE_CONTENT)) {
+                        System.out.println(getLocalName()
+                                + ": I lost :( Shutting down.. Goodbye");
+                        doDelete();
+                    }
+                }
 
 	}
 
@@ -100,8 +104,7 @@ public class Player extends Agent {
 		} else {
 			// NO valid card found
 			System.out.println(this.getLocalName()
-					+ ": No valid card. Drawing 1 card. "
-					+ (this.handCards.size() + 1) + " cards left");
+					+ ": No valid card. Passing.");
 			ACLMessage drawMsg = new ACLMessage(ACLMessage.REQUEST);
 			drawMsg.setContent(Dealer.DRAW_MESSAGE_CONTENT);
 			drawMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
@@ -165,11 +168,10 @@ public class Player extends Agent {
                 }
             } else if (this.handCards.get(i).charAt(0) == openCard.charAt(0)
                     || this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
-                playCard.setCard(handCards.get(i));
+                playCard.setCard(handCards.remove(i));
                 playCard.setMessage(this.getLocalName() + ": playing card "
-                        + handCards.get(i) + "! " + handCards.size()
+                        + playCard.getCard() + "! " + handCards.size()
                         + " cards left");
-                this.handCards.remove(i);
                 return playCard;
             }
         }
