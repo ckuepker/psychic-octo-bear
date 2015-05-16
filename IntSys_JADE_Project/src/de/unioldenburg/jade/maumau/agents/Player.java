@@ -74,10 +74,18 @@ public class Player extends Agent {
         boolean validCard = false;
         for (int i = 0; i < this.handCards.size(); i++) {
         	if (exec == true) {
-        		if (this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
-        			//doshit
-        		}
-        		
+                    char reactionIdentifier = openCard.charAt(1);
+                    switch (reactionIdentifier) {
+                        case '7': 
+                            reactToSeven();
+                            break;
+                        case '8':
+                            reactToEight();
+                            break;
+                        default:
+                            throw new IllegalArgumentException("Cannot react to "
+                                    + "given card "+openCard);
+                    }
         	} else if (this.handCards.get(i).charAt(0) == openCard.charAt(0) 
                     || this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
                 String playedCard = handCards.get(i);
@@ -117,9 +125,36 @@ public class Player extends Agent {
      * @author Armin Pistoor
      */
     private void sendFinishedMsg(String playedCard) {
-        ACLMessage finishedMsg = new ACLMessage(ACLMessage.REQUEST);
+        ACLMessage finishedMsg = new ACLMessage(ACLMessage.PROPOSE);
         finishedMsg.setContent(playedCard);
         finishedMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME, AID.ISLOCALNAME));
         send(finishedMsg);
+    }
+    
+    /**
+     * Tries to play a seven or passes if none is in hand
+     * @author ckuepker
+     */
+    private void reactToSeven() {
+        ACLMessage response = new ACLMessage(ACLMessage.PROPOSE);
+                response.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME, 
+                        AID.ISLOCALNAME));
+        for (String card : handCards) {
+            if (card.endsWith("7")) {
+                System.out.println(getLocalName()+": Playing "+card+" as "
+                        + "answer to the attacking 7");
+                handCards.remove(card);
+                response.setContent(card);
+                send(response);
+                return;
+            }
+        }
+        System.out.println(getLocalName()+": Cannot defend from attacking 7");
+        response.setContent(Dealer.DRAW_MESSAGE_CONTENT);
+        send(response);
+    }
+    
+    private void reactToEight() {
+        // Search 8 or wait
     }
 }
