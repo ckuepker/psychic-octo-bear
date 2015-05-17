@@ -180,11 +180,64 @@ public class GPlayer extends Player {
 			}
 		}
 		
-		//Play the color that's the least common in game
+		//Play the color that's the least common in game and no 7 or 8
+		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
+			for (int j = 0; j < handCards.size(); j++) {
+				//Dont check jacks and don't play 7 or 8
+				if ((this.handCards.get(j).charAt(1) != 'B') 
+						&& (this.handCards.get(j).charAt(1) != '7') 
+						&& (this.handCards.get(j).charAt(1) != '8')) {
+					//check card if the handcard color is the same as the least common color
+					if (this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) {
+						//check card if the handcard picture is the same as the openCard picture
+						//or the handcard color is the same as the openCard color
+						if( (this.handCards.get(j).charAt(1) == openCard.charAt(1)) 
+								|| (this.handCards.get(j).charAt(0) == openCard.charAt(0)) ) {
+							System.out.println(this.handCards.get(j) + " passt zu der Farbe");
+							this.openCards.add(this.handCards.get(j));
+							playCard.setCard(this.handCards.remove(j));
+							playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
+									+ playCard.getCard() + "! " + handCards.size()
+									+ " cards left");
+							return playCard;										
+						}
+						
+					}
+				}
+			}			
+		}
+		
+		//Maybe play a 8...
+		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
+			for (int j = 0; j < handCards.size(); j++) {
+				//Dont check jacks and don't play 7
+				if ((this.handCards.get(j).charAt(1) != 'B') 
+						&& (this.handCards.get(j).charAt(1) != '7')) {
+					//check card if the handcard color is the same as the least common color
+					if (this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) {
+						//check card if the handcard picture is the same as the openCard picture
+						//or the handcard color is the same as the openCard color
+						if( (this.handCards.get(j).charAt(1) == openCard.charAt(1)) 
+								|| (this.handCards.get(j).charAt(0) == openCard.charAt(0)) ) {
+							System.out.println(this.handCards.get(j) + " passt zu der Farbe");
+							this.openCards.add(this.handCards.get(j));
+							playCard.setCard(this.handCards.remove(j));
+							playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
+									+ playCard.getCard() + "! " + handCards.size()
+									+ " cards left");
+							return playCard;										
+						}
+						
+					}
+				}
+			}			
+		}
+		
+		//Maybe play a 7...
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
 			for (int j = 0; j < handCards.size(); j++) {
 				//Dont check jacks
-				if (this.handCards.get(j).charAt(1) != 'B') {
+				if ((this.handCards.get(j).charAt(1) != 'B')) {
 					//check card if the handcard color is the same as the least common color
 					if (this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) {
 						//check card if the handcard picture is the same as the openCard picture
