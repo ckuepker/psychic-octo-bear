@@ -26,7 +26,8 @@ public class Player extends Agent {
                 GAMEOVER_MESSAGE_CONTENT = "gameover",
                 NEXT_EXECUTE_CARD_MESSAGE_CONTENT = "nextExec",
                 NEXT_WISHED_CARD_MESSAGE_CONTENT = "wished",
-                PLAYED_CARD_MESSAGE_CONTENT_PREFIX = "played"
+                PLAYED_CARD_MESSAGE_CONTENT_PREFIX = "played",
+                STARTING_CARD_MESSAGE_CONTENT = "startingcard"
                 ;
 
 	public static final String PLAYER_LOCAL_NAME_PREFIX = "player";

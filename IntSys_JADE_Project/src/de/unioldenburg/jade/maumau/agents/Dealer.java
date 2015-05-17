@@ -153,14 +153,22 @@ public class Dealer extends Agent {
 					+ openCards.get(openCards.size() - 1));
 			// Send Message to first player to execute his turn. Message
 			// contains the upper card of the open cards
+			String upperCard = openCards.peek();
 			ACLMessage starterMsg = new ACLMessage(ACLMessage.INFORM);
 			starterMsg.setContent(Player.NEXT_MESSAGE_CONTENT
-					+ openCards.peek());
+					+ upperCard);
 			AID firstPlayer = new AID(players.get(0), AID.ISLOCALNAME);
 			System.out.println(getLocalName() + ": "
 					+ firstPlayer.getLocalName() + " starts the game");
 			starterMsg.addReceiver(firstPlayer);
 			send(starterMsg);
+
+			// Inform all other players about the topmost card
+			ACLMessage startingCardMessage = getMessageToAllPlayersWithExclusion(
+					ACLMessage.INFORM, players.get(0));
+			startingCardMessage.setContent(Player.STARTING_CARD_MESSAGE_CONTENT
+					+ upperCard);
+			send(startingCardMessage);
 		}
 	}
 
@@ -349,14 +357,21 @@ public class Dealer extends Agent {
 	private void broadcastPlayedCard(String playerLocalName, String card) {
 		System.out.println(getLocalName() + ": Informing players that "
 				+ playerLocalName + " played " + card);
-		ACLMessage broadcast = new ACLMessage(ACLMessage.INFORM);
+		ACLMessage broadcast = getMessageToAllPlayersWithExclusion(
+				ACLMessage.INFORM, playerLocalName);
 		broadcast.setContent(Player.PLAYED_CARD_MESSAGE_CONTENT_PREFIX + " "
 				+ playerLocalName + " " + card);
+		send(broadcast);
+	}
+
+	private ACLMessage getMessageToAllPlayersWithExclusion(int performative,
+			String excludedLocalName) {
+		ACLMessage m = new ACLMessage(performative);
 		for (String player : players) {
-			if (!player.equals(playerLocalName)) {
-				broadcast.addReceiver(new AID(player, AID.ISLOCALNAME));
+			if (!player.equals(excludedLocalName)) {
+				m.addReceiver(new AID(player, AID.ISLOCALNAME));
 			}
 		}
-		send(broadcast);
+		return m;
 	}
 }
