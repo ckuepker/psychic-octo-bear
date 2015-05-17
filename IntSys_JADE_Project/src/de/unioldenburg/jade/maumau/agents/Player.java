@@ -8,8 +8,10 @@ import java.util.ArrayList;
 
 import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
 import de.unioldenburg.jade.maumau.SelectedCard;
+
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * 
@@ -33,12 +35,18 @@ public class Player extends Agent {
 	 * the hand cards.
 	 */
 	private ArrayList<String> handCards;
+	
+	/**
+	 * the open cards.
+	 */
+	private Stack<String> openCards;
 
 	@Override
 	protected void setup() {
 		System.out.println(getLocalName() + ": Player started");
 		System.out.println("\tRequesting registration at dealer");
 		this.handCards = new ArrayList<String>();
+		this.openCards = new Stack<String>();
 		// Register self on administrator
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME, AID.ISLOCALNAME));
@@ -72,6 +80,11 @@ public class Player extends Agent {
                         System.out.println(getLocalName()
                                 + ": I lost :( Shutting down.. Goodbye");
                         doDelete();
+                    } else if (msg.getContent().startsWith(PLAYED_CARD_MESSAGE_CONTENT_PREFIX)) {
+//                    	Falls der player noch gebraucht wird (für krassere KIs)
+//                    	String player = msg.getContent().substring(6, (msg.getContent().length() - 2));
+                    	String card = msg.getContent().substring((msg.getContent().length() - 2), msg.getContent().length());
+                		openCards.add(card);
                     }
                 }
 
@@ -132,6 +145,7 @@ public class Player extends Agent {
 		SelectedCard playCard = new SelectedCard();
 		for (String card : handCards) {
 			if (card.charAt(1) == attackingCardCharacter) {
+				this.openCards.add(card);
 				handCards.remove(card);
 				playCard.setCard(card);
 				playCard.setMessage(getLocalName() + ": Playing " + card
@@ -151,6 +165,7 @@ public class Player extends Agent {
 	 * @author Armin Pistoor
 	 */
 	private SelectedCard getDefaultStrategy(String openCard, boolean exec) {
+		System.out.println("___________________" + this.openCards);
         SelectedCard playCard = new SelectedCard();
         List<Integer> jacks = new ArrayList<Integer>(4);
         for (int i = 0; i < this.handCards.size(); i++) {
@@ -167,6 +182,7 @@ public class Player extends Agent {
                 }
             } else if (this.handCards.get(i).charAt(0) == openCard.charAt(0)
                     || this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
+            	this.openCards.add(handCards.get(i));
                 playCard.setCard(handCards.remove(i));
                 playCard.setMessage(this.getLocalName() + ": playing card "
                         + playCard.getCard() + "! " + handCards.size()
@@ -176,6 +192,7 @@ public class Player extends Agent {
         }
         if (jacks.size() > 0) {
             int index = jacks.get(0);
+            this.openCards.add(this.handCards.get(index));
             playCard.setCard(this.handCards.remove(index));
             playCard.setJack(true);
             jacks.clear();
@@ -202,4 +219,5 @@ public class Player extends Agent {
             Random r = new Random();
             return colors[r.nextInt(4)];
 	}
+
 }
