@@ -101,6 +101,7 @@ public class Dealer extends Agent {
 			} else if (msg.getContent().startsWith(WISH_MESSAGE_CONTENT)) {
 				wishedColor = msg.getContent().substring(6);
 				String card = msg.getContent().substring(4, 6);
+				broadcastPlayedCard(msg.getSender().getLocalName(), card);
 				System.out.println("card at dealer: " + card);
 				System.out.println(getLocalName() + ": "
 						+ msg.getSender().getLocalName() + " wishes the color "

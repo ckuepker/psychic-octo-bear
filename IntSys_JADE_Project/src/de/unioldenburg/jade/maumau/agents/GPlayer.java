@@ -107,6 +107,8 @@ public class GPlayer extends Player{
 		}
 	}
 	
+	
+	
 	@Override
 	protected SelectedCard reactToAttack(Character attackingCardCharacter) {
 		SelectedCard playCard = new SelectedCard();
@@ -124,6 +126,19 @@ public class GPlayer extends Player{
 		playCard.setMessage(getLocalName() + ": Cannot defend from attacking "+attackingCardCharacter);
 		return playCard;
 	}
+	
+	/**
+	 * more intelligent Strategy to play cards.
+	 * @author Armin Pistoor
+	 * @param openCard - the open card
+	 * @param exec - attacking 7 or 8 or not
+	 * @return the card to select
+	 */
+	protected SelectedCard getIntelligentStrategy(String openCard, boolean exec) {
+		//dran denken, dass bei gespielten karten diese dem opencards stack hinzugefügt werden müssen
+		return null;
+	}
+
 
 
     /**
