@@ -27,36 +27,42 @@ public class GPlayer extends Player{
 
 		@Override
 		public void handleMessage(ACLMessage msg) {
-			  if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
-                  String card = msg.getContent().substring(8);
-                  handCards.add(card);
-                  System.out.println(getLocalName() + "[GPlayer]: Got card from "
-                          + "stack. Now holding " + handCards.size()
-                          + " cards in hand.");
-              } else if (msg.getContent().startsWith(
-                      NEXT_EXECUTE_CARD_MESSAGE_CONTENT)) {
-                  executeTurn(msg.getContent().substring(8), true);
-              } else if (msg.getContent().startsWith(NEXT_MESSAGE_CONTENT)) {
-                  executeTurn(msg.getContent().substring(4), false);
-              } else if (msg.getContent().startsWith(
-                      NEXT_WISHED_CARD_MESSAGE_CONTENT)) {
-                  executeTurn(msg.getContent().substring(6) + "0", false);
-                  // executeWishedColorTurn(msg.getContent().substring(6));
-              } else if (msg.getContent().equals(GAMEOVER_MESSAGE_CONTENT)) {
-                  System.out.println(getLocalName()
-                          + "[GPlayer]: I lost :( Shutting down.. Goodbye");
-                  doDelete();
-              } else if (msg.getContent().startsWith(PLAYED_CARD_MESSAGE_CONTENT_PREFIX)) {
-//              	Falls der player noch gebraucht wird (f�r krassere KIs)
-//              	String player = msg.getContent().substring(6, (msg.getContent().length() - 2));
-              	String card = msg.getContent().substring((msg.getContent().length() - 2), msg.getContent().length());
-          		openCards.add(card);
-              } else if (msg.getContent().equals(DECK_SHUFFLED_MESSAGE_CONTENT)) {
-            	  System.out.println(getLocalName() + "[GPlayer]: Deck was shuffled, clearing internal storage");
-            	  String upperCard = openCards.peek();
-            	  openCards.clear();
-            	  openCards.push(upperCard);
-              }
+			if (msg.getContent().startsWith(STARTING_CARD_MESSAGE_CONTENT)) {
+				String startingCard = msg.getContent().substring(STARTING_CARD_MESSAGE_CONTENT.length());
+				System.out.println(getLocalName()+"[GPlayer]: Starting card is " + startingCard);
+				openCards.add(startingCard);
+			} else if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
+				String card = msg.getContent().substring(8);
+				handCards.add(card);
+				System.out.println(getLocalName() + "[GPlayer]: Got card from "
+						+ "stack. Now holding " + handCards.size()
+						+ " cards in hand.");
+			} else if (msg.getContent().startsWith(NEXT_EXECUTE_CARD_MESSAGE_CONTENT)) {
+				executeTurn(msg.getContent().substring(8), true);
+			} else if (msg.getContent().startsWith(NEXT_MESSAGE_CONTENT)) {
+				executeTurn(msg.getContent().substring(4), false);
+			} else if (msg.getContent().startsWith(NEXT_WISHED_CARD_MESSAGE_CONTENT)) {
+				executeTurn(msg.getContent().substring(6) + "0", false);
+				// executeWishedColorTurn(msg.getContent().substring(6));
+			} else if (msg.getContent().equals(GAMEOVER_MESSAGE_CONTENT)) {
+				System.out.println(getLocalName() + "[GPlayer]: I lost :( Shutting down.. Goodbye");
+				doDelete();
+			} else if (msg.getContent().startsWith(PLAYED_CARD_MESSAGE_CONTENT_PREFIX)) {
+				// Falls der player noch gebraucht wird (f�r krassere KIs)
+				// String player = msg.getContent().substring(6,
+				// (msg.getContent().length() - 2));
+				String card = msg.getContent().substring(
+						(msg.getContent().length() - 2),
+						msg.getContent().length());
+				openCards.add(card);
+			} else if (msg.getContent().equals(DECK_SHUFFLED_MESSAGE_CONTENT)) {
+				System.out
+						.println(getLocalName()
+								+ "[GPlayer]: Deck was shuffled, clearing internal storage");
+				String upperCard = openCards.peek();
+				openCards.clear();
+				openCards.push(upperCard);
+			}
           }
 		}
     
