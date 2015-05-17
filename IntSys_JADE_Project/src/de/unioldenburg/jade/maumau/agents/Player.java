@@ -101,7 +101,16 @@ public class Player extends Agent {
 			}
 			finishedMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
 					AID.ISLOCALNAME));
-			send(finishedMsg);
+			if (this.handCards.isEmpty()) {
+				//wins game
+				System.out.println(this.getLocalName() + ": Mau-Mau!");
+				finishedMsg.setContent(Dealer.WIN_MESSAGE_CONTENT + playCard.getCard());
+				send(finishedMsg);
+				System.out.println(getLocalName() + ": Shutting down.. Goodbye");
+				doDelete();
+			} else {
+				send(finishedMsg);				
+			}
 		} else {
 			// NO valid card found
 			System.out.println(this.getLocalName()
@@ -111,17 +120,6 @@ public class Player extends Agent {
 			drawMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
 					AID.ISLOCALNAME));
 			send(drawMsg);
-		}
-		if (this.handCards.isEmpty()) {
-			// wins game
-			System.out.println(this.getLocalName() + ": Mau-Mau!");
-			ACLMessage winningMsg = new ACLMessage(ACLMessage.INFORM);
-			winningMsg.setContent(Dealer.WIN_MESSAGE_CONTENT);
-			winningMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
-					AID.ISLOCALNAME));
-			send(winningMsg);
-			System.out.println(getLocalName() + ": Shutting down.. Goodbye");
-			doDelete();
 		}
 	}
 
