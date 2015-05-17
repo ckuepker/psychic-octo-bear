@@ -8,8 +8,10 @@ import java.util.ArrayList;
 
 import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
 import de.unioldenburg.jade.maumau.SelectedCard;
+
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * 
@@ -32,7 +34,8 @@ public class Player extends Agent {
 	/**
 	 * the hand cards.
 	 */
-	private ArrayList<String> handCards;
+	protected ArrayList<String> handCards;
+	
 
 	@Override
 	protected void setup() {
@@ -87,7 +90,7 @@ public class Player extends Agent {
 	 *            8), false if another player already executed the card
 	 * @author Armin Pistoor
 	 */
-	private void executeTurn(String openCard, boolean exec) {
+	protected void executeTurn(String openCard, boolean exec) {
 		SelectedCard playCard = this.getDefaultStrategy(openCard, exec);
 		// check playCard
 		if (!(playCard.getCard() == null)) {
@@ -128,7 +131,7 @@ public class Player extends Agent {
 	 * 
 	 * @author ckuepker
 	 */
-	private SelectedCard reactToAttack(Character attackingCardCharacter) {
+	protected SelectedCard reactToAttack(Character attackingCardCharacter) {
 		SelectedCard playCard = new SelectedCard();
 		for (String card : handCards) {
 			if (card.charAt(1) == attackingCardCharacter) {
@@ -150,7 +153,7 @@ public class Player extends Agent {
 	 * @return the card to play return null if no suitable caard
 	 * @author Armin Pistoor
 	 */
-	private SelectedCard getDefaultStrategy(String openCard, boolean exec) {
+	protected SelectedCard getDefaultStrategy(String openCard, boolean exec) {
         SelectedCard playCard = new SelectedCard();
         List<Integer> jacks = new ArrayList<Integer>(4);
         for (int i = 0; i < this.handCards.size(); i++) {
@@ -202,4 +205,5 @@ public class Player extends Agent {
             Random r = new Random();
             return colors[r.nextInt(4)];
 	}
+
 }
