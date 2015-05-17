@@ -194,7 +194,7 @@ public class GPlayer extends Player {
 							System.out.println(this.handCards.get(j) + " passt zu der Farbe");
 							this.openCards.add(this.handCards.get(j));
 							playCard.setCard(this.handCards.remove(j));
-							playCard.setMessage(this.getLocalName() + ": playing card "
+							playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
 									+ playCard.getCard() + "! " + handCards.size()
 									+ " cards left");
 							return playCard;										
@@ -213,7 +213,7 @@ public class GPlayer extends Player {
 			playCard.setJack(true);
 			jacks.clear();
 			String color = this.getWishingColor();
-			playCard.setMessage(this.getLocalName() + ": playing card "
+			playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
 					+ playCard.getCard() + "! I would like to wish the color "
 					+ color + "! " + handCards.size() + " cards left");
 			playCard.setWishedColor(color);
