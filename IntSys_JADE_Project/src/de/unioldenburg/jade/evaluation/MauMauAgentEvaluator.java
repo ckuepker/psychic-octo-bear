@@ -15,7 +15,8 @@ import de.unioldenburg.jade.starter.AgentRuntimeCreator;
 public class MauMauAgentEvaluator extends Agent {
 	
 	public final static String EVALUATOR_LOCAL_NAME = "evaluator";
-	private final static int RUNS_PER_STARTING_POSITION = 10;
+	private final static int RUNS_PER_STARTING_POSITION = 1000;
+	private final static long TIME_BETWEEN_RUNS = 125;
 	private final static int[] wins = {0,0,0};
 	
 	private AgentContainer container;
@@ -39,7 +40,7 @@ public class MauMauAgentEvaluator extends Agent {
 				idle = true;
 			}
 		});
-		addBehaviour(new TickerBehaviour(this, 250) {
+		addBehaviour(new TickerBehaviour(this, TIME_BETWEEN_RUNS) {
 			
 			@Override
 			protected void onTick() {
@@ -71,6 +72,7 @@ public class MauMauAgentEvaluator extends Agent {
 					+ "Wins from pos. #1: "+wins[1] + "\n"
 					+ "Wins from pos. #2: "+wins[2] + "\n"
 					+ "Goodbye...");
+			System.exit(0);
 		}
 	}
 	

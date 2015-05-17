@@ -163,19 +163,20 @@ public class Player extends Agent {
 	 */
 	protected SelectedCard getDefaultStrategy(String openCard, boolean exec) {
         SelectedCard playCard = new SelectedCard();
+        if (exec == true) {
+	        char reactionIdentifier = openCard.charAt(1);
+	        switch (reactionIdentifier) {
+	            case '7': case '8':
+	                return reactToAttack(reactionIdentifier);
+	            default:
+	                throw new IllegalArgumentException("Cannot react to "
+	                        + "given card " + openCard);
+	        }
+        }
         List<Integer> jacks = new ArrayList<Integer>(4);
         for (int i = 0; i < this.handCards.size(); i++) {
             if (handCards.get(i).charAt(1) == 'B') {
                 jacks.add(i);
-            } else if (exec == true) {
-                char reactionIdentifier = openCard.charAt(1);
-                switch (reactionIdentifier) {
-                    case '7': case '8':
-                        return reactToAttack(reactionIdentifier);
-                    default:
-                        throw new IllegalArgumentException("Cannot react to "
-                                + "given card " + openCard);
-                }
             } else if (this.handCards.get(i).charAt(0) == openCard.charAt(0)
                     || this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
                 playCard.setCard(handCards.remove(i));

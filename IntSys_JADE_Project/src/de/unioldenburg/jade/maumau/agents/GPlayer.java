@@ -168,7 +168,7 @@ public class GPlayer extends Player {
 			case '8':
 				return reactToAttack(reactionIdentifier);
 			default:
-				throw new IllegalArgumentException("Cannot react to "
+				throw new IllegalArgumentException("[GPlayer] Cannot react to "
 						+ "given card " + openCard);
 			}
 		}
