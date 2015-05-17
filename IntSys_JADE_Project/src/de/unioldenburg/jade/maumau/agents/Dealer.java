@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
+import de.unioldenburg.jade.evaluation.MauMauAgentEvaluator;
 import de.unioldenburg.jade.maumau.MauMau;
 
 /**
@@ -16,6 +17,8 @@ import de.unioldenburg.jade.maumau.MauMau;
  * @author Christoph Küpker
  */
 public class Dealer extends Agent {
+	
+	public String winnerLocalName = "";
 
 	public static final String REGISTER_MESSAGE_CONTENT = "register",
 			DRAW_MESSAGE_CONTENT = "pass", WIN_MESSAGE_CONTENT = "win",
@@ -125,8 +128,13 @@ public class Dealer extends Agent {
 				gameoverMessage.setContent(Player.GAMEOVER_MESSAGE_CONTENT);
 				send(gameoverMessage);
 				// shutdown
-				System.out
-						.println(getLocalName() + ": Shutting down.. Goodbye");
+				System.out.println(getLocalName() + ": Shutting down.. Goodbye");
+				winnerLocalName = msg.getSender().getLocalName();
+				// Evaluation
+				ACLMessage evalMessage = new ACLMessage(ACLMessage.INFORM);
+				evalMessage.setContent(winnerLocalName);
+				evalMessage.addReceiver(new AID(MauMauAgentEvaluator.EVALUATOR_LOCAL_NAME, AID.ISLOCALNAME));
+				send(evalMessage);
 				doDelete();
 			} else if (msg.getContent().equals(LAST_CARD_MESSAGE_CONTENT)) {
 				String sender = msg.getSender().getLocalName();
