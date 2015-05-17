@@ -19,8 +19,8 @@ public class MauMauAgentEvaluator extends Agent {
 	private final static int[] wins = {0,0,0};
 	
 	private AgentContainer container;
-	private String gPlayerLocalName = "";
 	private int startingPosition = 0;
+	private String gPlayerLocalName = Player.PLAYER_LOCAL_NAME_PREFIX + startingPosition;
 	private int runs = 0;
 	private boolean idle = false;
 	
@@ -39,7 +39,7 @@ public class MauMauAgentEvaluator extends Agent {
 				idle = true;
 			}
 		});
-		addBehaviour(new TickerBehaviour(this, 1000) {
+		addBehaviour(new TickerBehaviour(this, 250) {
 			
 			@Override
 			protected void onTick() {
@@ -58,6 +58,7 @@ public class MauMauAgentEvaluator extends Agent {
 		} else if (startingPosition < 3) {
 			runs = 0;
 			startingPosition++;
+			gPlayerLocalName = Player.PLAYER_LOCAL_NAME_PREFIX+startingPosition;
 			System.out.println("\n=========================================\n"
 					+getLocalName()+": Advancing starting position to "+startingPosition
 					+"\n=====================================\n\n");
