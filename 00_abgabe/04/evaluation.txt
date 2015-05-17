@@ -1,0 +1,18 @@
+Intelligent Systems SoSe 2015
+Übung 04
+Armin Pistoor, Christoph Küpker
+======
+Evaluation
+======
+
+Wir haben unseren Agenten testweise von allen Startpositionen gegen die Dummy-Agenten spielen lassen. Der genaue Ablauf kann in de.unioldenburg.jade.maumau.evaluation.MauMauAgentEvaluator eingesehen werden. Die hier angegebenen Ergebnisse beziehen sich auf einen Durchlauf mit 10000 Spielen pro Startposition für den smarten Agenten.
+
+Der Erwartungswert für einen Dummy-Agenten ist eine Gewinnrate von ca. 33% da die Wahrscheinlichkeit zum Gewinnen, ohne Betrachtung der Startposition, für alle Dummy-Agenten gleich ist. Für unseren Agenten ergaben sich folgende Gewinnraten:
+
+Position #0 (Fängt an): 41,8%
+Position #1: 39,8%
+Position #2 (Als letzter dran): 33,7%
+
+Damit ergibt sich, mit Ausnahme von Position 2, eine leicht erhöhte Gewinnchance für unseren Agenten.
+
+
