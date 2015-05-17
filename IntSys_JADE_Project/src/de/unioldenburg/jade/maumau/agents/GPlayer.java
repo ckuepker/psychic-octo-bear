@@ -4,6 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import de.unioldenburg.jade.behaviours.WaitForMessageBehaviour;
@@ -137,7 +138,45 @@ public class GPlayer extends Player{
 	 */
 	protected SelectedCard getIntelligentStrategy(String openCard, boolean exec) {
 		//dran denken, dass bei gespielten karten diese dem opencards stack hinzugefügt werden müssen
-		return null;
+		 SelectedCard playCard = new SelectedCard();
+	        List<Integer> jacks = new ArrayList<Integer>(4);
+	        for (int i = 0; i < this.handCards.size(); i++) {
+	            if (handCards.get(i).charAt(1) == 'B') {
+	                jacks.add(i);
+	            } else if (exec == true) {
+	                char reactionIdentifier = openCard.charAt(1);
+	                switch (reactionIdentifier) {
+	                    case '7': case '8':
+	                        return reactToAttack(reactionIdentifier);
+	                    default:
+	                        throw new IllegalArgumentException("Cannot react to "
+	                                + "given card " + openCard);
+	                }
+	            } else if (this.handCards.get(i).charAt(0) == openCard.charAt(0)
+	                    || this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
+	            	this.openCards.add(handCards.get(i));
+	                playCard.setCard(handCards.remove(i));
+	                playCard.setMessage(this.getLocalName() + ": playing card "
+	                        + playCard.getCard() + "! " + handCards.size()
+	                        + " cards left");
+	                return playCard;
+	            }
+	        }
+	        if (jacks.size() > 0) {
+	            int index = jacks.get(0);
+	            this.openCards.add(this.handCards.get(index));
+	            playCard.setCard(this.handCards.remove(index));
+	            playCard.setJack(true);
+	            jacks.clear();
+	            String color = this.getWishingColor();
+	            playCard.setMessage(this.getLocalName() + ": playing card "
+	                    + playCard.getCard() + "! I would like to wish the color "
+	                    + color + "! " + handCards.size() + " cards left");
+	            playCard.setWishedColor(color);
+	        } else {
+	            playCard.setCard(null);
+	        }
+	        return playCard;
 	}
 
 
