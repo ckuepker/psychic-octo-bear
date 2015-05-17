@@ -164,7 +164,7 @@ public class Dealer extends Agent {
 			send(starterMsg);
 
 			// Inform all other players about the topmost card
-			ACLMessage startingCardMessage = getMessageToAllPlayersWithExclusion(
+			ACLMessage startingCardMessage = createMessageToAllPlayers(
 					ACLMessage.INFORM, players.get(0));
 			startingCardMessage.setContent(Player.STARTING_CARD_MESSAGE_CONTENT
 					+ upperCard);
@@ -302,6 +302,10 @@ public class Dealer extends Agent {
 			Collections.shuffle(deck);
 			openCards.clear();
 			openCards.add(upperCard);
+			// Inform all players about shuffling
+			ACLMessage shuffleInformation = createMessageToAllPlayers(ACLMessage.INFORM, null);
+			shuffleInformation.setContent(Player.DECK_SHUFFLED_MESSAGE_CONTENT);
+			send(shuffleInformation);
 		}
 	}
 
@@ -357,15 +361,22 @@ public class Dealer extends Agent {
 	private void broadcastPlayedCard(String playerLocalName, String card) {
 		System.out.println(getLocalName() + ": Informing players that "
 				+ playerLocalName + " played " + card);
-		ACLMessage broadcast = getMessageToAllPlayersWithExclusion(
+		ACLMessage broadcast = createMessageToAllPlayers(
 				ACLMessage.INFORM, playerLocalName);
 		broadcast.setContent(Player.PLAYED_CARD_MESSAGE_CONTENT_PREFIX + " "
 				+ playerLocalName + " " + card);
 		send(broadcast);
 	}
 
-	private ACLMessage getMessageToAllPlayersWithExclusion(int performative,
-			String excludedLocalName) {
+	/**
+	 * Creates an ACLMessage with the given performative which has all players added as recipients
+	 * excluding the given local name. If the local name to be excluded is null then all players
+	 * will be informed.
+	 * @param performative
+	 * @param excludedLocalName
+	 * @return
+	 */
+	private ACLMessage createMessageToAllPlayers(int performative, String excludedLocalName) {
 		ACLMessage m = new ACLMessage(performative);
 		for (String player : players) {
 			if (!player.equals(excludedLocalName)) {
