@@ -29,27 +29,27 @@ public class GPlayer extends Player {
 
 		@Override
 		public void handleMessage(ACLMessage msg) {
-			if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
+			if (msg.getContent().startsWith(STARTING_CARD_MESSAGE_CONTENT)) {
+				String startingCard = msg.getContent().substring(STARTING_CARD_MESSAGE_CONTENT.length());
+				System.out.println(getLocalName()+"[GPlayer]: Starting card is " + startingCard);
+				openCards.add(startingCard);
+			} else if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
 				String card = msg.getContent().substring(8);
 				handCards.add(card);
-				System.out.println(getLocalName() + ": Got card from "
+				System.out.println(getLocalName() + "[GPlayer]: Got card from "
 						+ "stack. Now holding " + handCards.size()
 						+ " cards in hand.");
-			} else if (msg.getContent().startsWith(
-					NEXT_EXECUTE_CARD_MESSAGE_CONTENT)) {
+			} else if (msg.getContent().startsWith(NEXT_EXECUTE_CARD_MESSAGE_CONTENT)) {
 				executeTurn(msg.getContent().substring(8), true);
 			} else if (msg.getContent().startsWith(NEXT_MESSAGE_CONTENT)) {
 				executeTurn(msg.getContent().substring(4), false);
-			} else if (msg.getContent().startsWith(
-					NEXT_WISHED_CARD_MESSAGE_CONTENT)) {
+			} else if (msg.getContent().startsWith(NEXT_WISHED_CARD_MESSAGE_CONTENT)) {
 				executeTurn(msg.getContent().substring(6) + "0", false);
 				// executeWishedColorTurn(msg.getContent().substring(6));
 			} else if (msg.getContent().equals(GAMEOVER_MESSAGE_CONTENT)) {
-				System.out.println(getLocalName()
-						+ ": I lost :( Shutting down.. Goodbye");
+				System.out.println(getLocalName() + "[GPlayer]: I lost :( Shutting down.. Goodbye");
 				doDelete();
-			} else if (msg.getContent().startsWith(
-					PLAYED_CARD_MESSAGE_CONTENT_PREFIX)) {
+			} else if (msg.getContent().startsWith(PLAYED_CARD_MESSAGE_CONTENT_PREFIX)) {
 				// Falls der player noch gebraucht wird (f�r krassere KIs)
 				// String player = msg.getContent().substring(6,
 				// (msg.getContent().length() - 2));
@@ -57,13 +57,20 @@ public class GPlayer extends Player {
 						(msg.getContent().length() - 2),
 						msg.getContent().length());
 				openCards.add(card);
+			} else if (msg.getContent().equals(DECK_SHUFFLED_MESSAGE_CONTENT)) {
+				System.out
+						.println(getLocalName()
+								+ "[GPlayer]: Deck was shuffled, clearing internal storage");
+				String upperCard = openCards.peek();
+				openCards.clear();
+				openCards.push(upperCard);
 			}
-		}
+          }
 	}
 
 	@Override
 	protected void setup() {
-		System.out.println(getLocalName() + ": Player started");
+		System.out.println(getLocalName() + "[GPlayer]: Player started");
 		System.out.println("\tRequesting registration at dealer");
 		this.handCards = new ArrayList<String>();
 		this.openCards = new Stack<String>();
@@ -73,7 +80,7 @@ public class GPlayer extends Player {
 		msg.setContent(Dealer.REGISTER_MESSAGE_CONTENT);
 		send(msg);
 		this.addBehaviour(new GPlayerMessageHandler());
-		System.out.println(getLocalName() + ": GONNA WIN THIS, CUZ SMART");
+		System.out.println(getLocalName() + "[GPlayer]: GONNA WIN THIS, CUZ SMART");
 	}
 
 	@Override
@@ -93,13 +100,11 @@ public class GPlayer extends Player {
 			finishedMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
 					AID.ISLOCALNAME));
 			if (this.handCards.isEmpty()) {
-				// wins game
-				System.out.println(this.getLocalName() + ": Mau-Mau!");
-				finishedMsg.setContent(Dealer.WIN_MESSAGE_CONTENT
-						+ playCard.getCard());
+				//wins game
+				System.out.println(this.getLocalName() + "[GPlayer]: Mau-Mau!");
+				finishedMsg.setContent(Dealer.WIN_MESSAGE_CONTENT + playCard.getCard());
 				send(finishedMsg);
-				System.out
-						.println(getLocalName() + ": Shutting down.. Goodbye");
+				System.out.println(getLocalName() + "[GPlayer]: Shutting down.. Goodbye");
 				doDelete();
 			} else {
 				send(finishedMsg);
@@ -107,7 +112,7 @@ public class GPlayer extends Player {
 		} else {
 			// NO valid card found
 			System.out.println(this.getLocalName()
-					+ ": No valid card. Passing.");
+					+ "[GPlayer]: No valid card. Passing.");
 			ACLMessage drawMsg = new ACLMessage(ACLMessage.REQUEST);
 			drawMsg.setContent(Dealer.DRAW_MESSAGE_CONTENT);
 			drawMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
@@ -124,15 +129,13 @@ public class GPlayer extends Player {
 				this.openCards.add(card);
 				handCards.remove(card);
 				playCard.setCard(card);
-				playCard.setMessage(getLocalName() + ": Playing " + card
-						+ " as " + "answer to the attacking "
-						+ attackingCardCharacter);
+				playCard.setMessage(getLocalName() + "[GPlayer]: Playing " + card
+						+ " as " + "answer to the attacking "+attackingCardCharacter);
 				return playCard;
 			}
 		}
 		playCard.setCard(null);
-		playCard.setMessage(getLocalName() + ": Cannot defend from attacking "
-				+ attackingCardCharacter);
+		playCard.setMessage(getLocalName() + "[GPlayer]: Cannot defend from attacking "+attackingCardCharacter);
 		return playCard;
 	}
 
