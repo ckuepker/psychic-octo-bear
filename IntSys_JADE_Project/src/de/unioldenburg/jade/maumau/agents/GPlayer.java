@@ -173,12 +173,23 @@ public class GPlayer extends Player {
 		
 		//Play the color that's the least common in game
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
-			for (String handCard : this.handCards) {
-//				if (handCard.charAt(index)entry.getKey()) {
-//					
-//				}
+			for (int j = 0; j < handCards.size(); j++) {
+				//if the handcard color is the same as the least common color
+				//and the handcard picture is the same as the openCard picture
+				//or the handcard color is the same as the openCard color --> play that card
+				if ((this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) 
+						&& ((this.handCards.get(j).charAt(1) == openCard.charAt(1)) 
+								|| (this.handCards.get(j).charAt(0) == openCard.charAt(0)))) {
+					this.openCards.add(this.handCards.get(j));
+					playCard.setCard(this.handCards.get(j));
+					playCard.setMessage(this.getLocalName() + ": playing card "
+							+ playCard.getCard() + "! " + handCards.size()
+							+ " cards left");
+					return playCard;										
+				}
 			}			
 		}
+		
 		
 		
 		
