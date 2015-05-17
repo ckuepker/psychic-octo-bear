@@ -46,7 +46,7 @@ public class GPlayer extends Player{
                           + ": I lost :( Shutting down.. Goodbye");
                   doDelete();
               } else if (msg.getContent().startsWith(PLAYED_CARD_MESSAGE_CONTENT_PREFIX)) {
-//              	Falls der player noch gebraucht wird (für krassere KIs)
+//              	Falls der player noch gebraucht wird (fï¿½r krassere KIs)
 //              	String player = msg.getContent().substring(6, (msg.getContent().length() - 2));
               	String card = msg.getContent().substring((msg.getContent().length() - 2), msg.getContent().length());
           		openCards.add(card);
@@ -66,6 +66,7 @@ public class GPlayer extends Player{
 		msg.setContent(Dealer.REGISTER_MESSAGE_CONTENT);
 		send(msg);
 		this.addBehaviour(new GPlayerMessageHandler());
+		System.out.println(getLocalName() + ": GONNA WIN THIS, CUZ SMART");
 	}
     	
     

@@ -1,10 +1,6 @@
 package de.unioldenburg.jade.starter;
 
-import de.unioldenburg.jade.contractnet.agents.Administrator;
-import de.unioldenburg.jade.contractnet.agents.Participant;
 import jade.core.Agent;
-import jade.core.Profile;
-import jade.core.ProfileImpl;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
@@ -34,24 +30,7 @@ public class AdministratedMASStarter {
             String administratorName, Class<? extends Agent> participantClass,
             int participantCount, String participantLocalNamePrefix,
             boolean gui) {
-        String host;
-        int port;
-        String platform = null; // default name
-        boolean main = true;
-
-        host = "localhost";
-        port = -1; // default-port 1099
-
-        
-        jade.core.Runtime runtime = jade.core.Runtime.instance();
-        Profile profile = null;
-        AgentContainer container = null;
-
-        profile = new ProfileImpl(host, port, platform, main);
-        profile.setParameter("gui", ""+gui);
-
-        // Create container
-        container = runtime.createMainContainer(profile);
+        AgentContainer container = AgentRuntimeCreator.createAgentContainer(gui);
 
         // Create agents
         try {
