@@ -20,12 +20,18 @@ import de.unioldenburg.jade.maumau.SelectedCard;
  */
 public class GPlayer extends Player {
 
+
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * the open cards.
 	 */
 	private Stack<String> openCards;
 
 	private class GPlayerMessageHandler extends WaitForMessageBehaviour {
+
+
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public void handleMessage(ACLMessage msg) {
@@ -153,11 +159,6 @@ public class GPlayer extends Player {
 		SelectedCard playCard = new SelectedCard();
 		List<Integer> jacks = new ArrayList<Integer>(4);
 		Map<String, Integer> mostCommonColors = this.getColorMap();
-		System.out.println();
-		System.out.println("___________________________________________________");
-		System.out.println("Farben: " + mostCommonColors);
-		System.out.println("Oberste Karte: " + openCard);
-		System.out.println("Handkarten: " + this.handCards);
 		
 		//react to 7 and 8
 		if (exec == true) {
@@ -181,7 +182,6 @@ public class GPlayer extends Player {
 		
 		//Play the color that's the least common in game
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
-			System.out.println("Wenigst vorkommende Farbe: " + entry.getKey());
 			for (int j = 0; j < handCards.size(); j++) {
 				//Dont check jacks
 				if (this.handCards.get(j).charAt(1) != 'B') {
@@ -204,36 +204,6 @@ public class GPlayer extends Player {
 				}
 			}			
 		}
-		
-		
-		
-		
-		
-		
-//		for (int i = 0; i < this.handCards.size(); i++) {
-//			//Find Jacks
-//			if (handCards.get(i).charAt(1) == 'B') {
-//				jacks.add(i);
-//			} else if (exec == true) {
-//				char reactionIdentifier = openCard.charAt(1);
-//				switch (reactionIdentifier) {
-//				case '7':
-//				case '8':
-//					return reactToAttack(reactionIdentifier);
-//				default:
-//					throw new IllegalArgumentException("Cannot react to "
-//							+ "given card " + openCard);
-//				}
-//			} else if (this.handCards.get(i).charAt(0) == openCard.charAt(0)
-//					|| this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
-//				this.openCards.add(handCards.get(i));
-//				playCard.setCard(handCards.remove(i));
-//				playCard.setMessage(this.getLocalName() + ": playing card "
-//						+ playCard.getCard() + "! " + handCards.size()
-//						+ " cards left");
-//				return playCard;
-//			}
-//		}
 		
 		//No card to play - check if there is a jack
 		if (jacks.size() > 0) {
