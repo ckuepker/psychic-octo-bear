@@ -114,7 +114,13 @@ public class Player extends Agent {
 				System.out.println(getLocalName() + ": Shutting down.. Goodbye");
 				doDelete();
 			} else {
-				send(finishedMsg);				
+				send(finishedMsg);
+				if (this.handCards.size() == 1) {
+					ACLMessage lastCardMessage = new ACLMessage(ACLMessage.INFORM);
+					lastCardMessage.setContent(Dealer.LAST_CARD_MESSAGE_CONTENT);
+					lastCardMessage.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME, AID.ISLOCALNAME));
+					send(lastCardMessage);
+				}
 			}
 		} else {
 			// NO valid card found

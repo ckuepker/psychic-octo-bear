@@ -19,7 +19,8 @@ public class Dealer extends Agent {
 
 	public static final String REGISTER_MESSAGE_CONTENT = "register",
 			DRAW_MESSAGE_CONTENT = "pass", WIN_MESSAGE_CONTENT = "win",
-			WISH_MESSAGE_CONTENT = "wish";
+			WISH_MESSAGE_CONTENT = "wish",
+			LAST_CARD_MESSAGE_CONTENT = "last";
 
 	private static final long serialVersionUID = 1L;
 
@@ -127,6 +128,10 @@ public class Dealer extends Agent {
 				System.out
 						.println(getLocalName() + ": Shutting down.. Goodbye");
 				doDelete();
+			} else if (msg.getContent().equals(LAST_CARD_MESSAGE_CONTENT)) {
+				String sender = msg.getSender().getLocalName();
+				ACLMessage lastCardBroadcast = createMessageToAllPlayers(ACLMessage.INFORM, sender);
+				lastCardBroadcast.setContent(sender+" "+LAST_CARD_MESSAGE_CONTENT);
 			} else {
 				// Card played
 				numberOfTurns++;
