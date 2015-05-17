@@ -153,6 +153,11 @@ public class GPlayer extends Player {
 		SelectedCard playCard = new SelectedCard();
 		List<Integer> jacks = new ArrayList<Integer>(4);
 		Map<String, Integer> mostCommonColors = this.getColorMap();
+		System.out.println();
+		System.out.println("___________________________________________________");
+		System.out.println("Farben: " + mostCommonColors);
+		System.out.println("Oberste Karte: " + openCard);
+		System.out.println("Handkarten: " + this.handCards);
 		
 		//react to 7 and 8
 		if (exec == true) {
@@ -176,19 +181,26 @@ public class GPlayer extends Player {
 		
 		//Play the color that's the least common in game
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
+			System.out.println("Wenigst vorkommende Farbe: " + entry.getKey());
 			for (int j = 0; j < handCards.size(); j++) {
-				//if the handcard color is the same as the least common color
-				//and the handcard picture is the same as the openCard picture
-				//or the handcard color is the same as the openCard color --> play that card
-				if ((this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) 
-						&& ((this.handCards.get(j).charAt(1) == openCard.charAt(1)) 
-								|| (this.handCards.get(j).charAt(0) == openCard.charAt(0)))) {
-					this.openCards.add(this.handCards.get(j));
-					playCard.setCard(this.handCards.get(j));
-					playCard.setMessage(this.getLocalName() + ": playing card "
-							+ playCard.getCard() + "! " + handCards.size()
-							+ " cards left");
-					return playCard;										
+				//Dont check jacks
+				if (this.handCards.get(j).charAt(1) != 'B') {
+					//check card if the handcard color is the same as the least common color
+					if (this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) {
+						//check card if the handcard picture is the same as the openCard picture
+						//or the handcard color is the same as the openCard color
+						if( (this.handCards.get(j).charAt(1) == openCard.charAt(1)) 
+								|| (this.handCards.get(j).charAt(0) == openCard.charAt(0)) ) {
+							System.out.println(this.handCards.get(j) + " passt zu der Farbe");
+							this.openCards.add(this.handCards.get(j));
+							playCard.setCard(this.handCards.remove(j));
+							playCard.setMessage(this.getLocalName() + ": playing card "
+									+ playCard.getCard() + "! " + handCards.size()
+									+ " cards left");
+							return playCard;										
+						}
+						
+					}
 				}
 			}			
 		}
@@ -285,21 +297,17 @@ public class GPlayer extends Player {
 		
 		//Create Map
 		Map<String, Integer> mostCommonColors = new LinkedHashMap<String, Integer>();
-		for (int i = (handCards.size() + this.openCards.size()); i > 0; i--) {
+		for (int i = (handCards.size() + this.openCards.size()); i >= 0; i--) {
 			if (clubs == i) {
-				System.out.println("jetzt kreuz " + i);
 				mostCommonColors.put("K", i);
 			} 
 			if (spades == i) {
-				System.out.println("jetzt pik " + i);
 				mostCommonColors.put("P", i);
 			} 
 			if (hearts == i) {
-				System.out.println("jetzt herz " + i);
 				mostCommonColors.put("H", i);
 			} 
 			if (diamonds == i) {
-				System.out.println("jetzt karo " + i);
 				mostCommonColors.put("C", i);
 			}
 		}
