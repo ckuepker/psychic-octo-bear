@@ -30,7 +30,7 @@ public class GPlayer extends Player{
 			  if (msg.getContent().startsWith(DISTRIBUTE_CARD_MESSAGE_CONTENT)) {
                   String card = msg.getContent().substring(8);
                   handCards.add(card);
-                  System.out.println(getLocalName() + ": Got card from "
+                  System.out.println(getLocalName() + "[GPlayer]: Got card from "
                           + "stack. Now holding " + handCards.size()
                           + " cards in hand.");
               } else if (msg.getContent().startsWith(
@@ -44,20 +44,25 @@ public class GPlayer extends Player{
                   // executeWishedColorTurn(msg.getContent().substring(6));
               } else if (msg.getContent().equals(GAMEOVER_MESSAGE_CONTENT)) {
                   System.out.println(getLocalName()
-                          + ": I lost :( Shutting down.. Goodbye");
+                          + "[GPlayer]: I lost :( Shutting down.. Goodbye");
                   doDelete();
               } else if (msg.getContent().startsWith(PLAYED_CARD_MESSAGE_CONTENT_PREFIX)) {
 //              	Falls der player noch gebraucht wird (fï¿½r krassere KIs)
 //              	String player = msg.getContent().substring(6, (msg.getContent().length() - 2));
               	String card = msg.getContent().substring((msg.getContent().length() - 2), msg.getContent().length());
           		openCards.add(card);
+              } else if (msg.getContent().equals(DECK_SHUFFLED_MESSAGE_CONTENT)) {
+            	  System.out.println(getLocalName() + "[GPlayer]: Deck was shuffled, clearing internal storage");
+            	  String upperCard = openCards.peek();
+            	  openCards.clear();
+            	  openCards.push(upperCard);
               }
           }
 		}
     
     @Override
 	protected void setup() {
-		System.out.println(getLocalName() + ": Player started");
+		System.out.println(getLocalName() + "[GPlayer]: Player started");
 		System.out.println("\tRequesting registration at dealer");
 		this.handCards = new ArrayList<String>();
 		this.openCards = new Stack<String>();
@@ -67,7 +72,7 @@ public class GPlayer extends Player{
 		msg.setContent(Dealer.REGISTER_MESSAGE_CONTENT);
 		send(msg);
 		this.addBehaviour(new GPlayerMessageHandler());
-		System.out.println(getLocalName() + ": GONNA WIN THIS, CUZ SMART");
+		System.out.println(getLocalName() + "[GPlayer]: GONNA WIN THIS, CUZ SMART");
 	}
     	
     
@@ -89,10 +94,10 @@ public class GPlayer extends Player{
 					AID.ISLOCALNAME));
 			if (this.handCards.isEmpty()) {
 				//wins game
-				System.out.println(this.getLocalName() + ": Mau-Mau!");
+				System.out.println(this.getLocalName() + "[GPlayer]: Mau-Mau!");
 				finishedMsg.setContent(Dealer.WIN_MESSAGE_CONTENT + playCard.getCard());
 				send(finishedMsg);
-				System.out.println(getLocalName() + ": Shutting down.. Goodbye");
+				System.out.println(getLocalName() + "[GPlayer]: Shutting down.. Goodbye");
 				doDelete();
 			} else {
 				send(finishedMsg);				
@@ -100,7 +105,7 @@ public class GPlayer extends Player{
 		} else {
 			// NO valid card found
 			System.out.println(this.getLocalName()
-					+ ": No valid card. Passing.");
+					+ "[GPlayer]: No valid card. Passing.");
 			ACLMessage drawMsg = new ACLMessage(ACLMessage.REQUEST);
 			drawMsg.setContent(Dealer.DRAW_MESSAGE_CONTENT);
 			drawMsg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME,
@@ -119,13 +124,13 @@ public class GPlayer extends Player{
 				this.openCards.add(card);
 				handCards.remove(card);
 				playCard.setCard(card);
-				playCard.setMessage(getLocalName() + ": Playing " + card
+				playCard.setMessage(getLocalName() + "[GPlayer]: Playing " + card
 						+ " as " + "answer to the attacking "+attackingCardCharacter);
 				return playCard;
 			}
 		}
 		playCard.setCard(null);
-		playCard.setMessage(getLocalName() + ": Cannot defend from attacking "+attackingCardCharacter);
+		playCard.setMessage(getLocalName() + "[GPlayer]: Cannot defend from attacking "+attackingCardCharacter);
 		return playCard;
 	}
 	
@@ -137,7 +142,7 @@ public class GPlayer extends Player{
 	 * @return the card to select
 	 */
 	protected SelectedCard getIntelligentStrategy(String openCard, boolean exec) {
-		//dran denken, dass bei gespielten karten diese dem opencards stack hinzugefügt werden müssen
+		//dran denken, dass bei gespielten karten diese dem opencards stack hinzugefï¿½gt werden mï¿½ssen
 		 SelectedCard playCard = new SelectedCard();
 	        List<Integer> jacks = new ArrayList<Integer>(4);
 	        for (int i = 0; i < this.handCards.size(); i++) {
@@ -156,7 +161,7 @@ public class GPlayer extends Player{
 	                    || this.handCards.get(i).charAt(1) == openCard.charAt(1)) {
 	            	this.openCards.add(handCards.get(i));
 	                playCard.setCard(handCards.remove(i));
-	                playCard.setMessage(this.getLocalName() + ": playing card "
+	                playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
 	                        + playCard.getCard() + "! " + handCards.size()
 	                        + " cards left");
 	                return playCard;
@@ -169,7 +174,7 @@ public class GPlayer extends Player{
 	            playCard.setJack(true);
 	            jacks.clear();
 	            String color = this.getWishingColor();
-	            playCard.setMessage(this.getLocalName() + ": playing card "
+	            playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
 	                    + playCard.getCard() + "! I would like to wish the color "
 	                    + color + "! " + handCards.size() + " cards left");
 	            playCard.setWishedColor(color);
