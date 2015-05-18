@@ -25,6 +25,11 @@ public class GPlayer extends Player {
 	 * the open cards.
 	 */
 	private Stack<String> openCards;
+	
+	/**
+	 * is there any player who has only 1 card left
+	 */
+	private boolean isLastCardPlayerPresent;
 
 	private class GPlayerMessageHandler extends WaitForMessageBehaviour {
 
@@ -68,6 +73,8 @@ public class GPlayer extends Player {
 				String upperCard = openCards.peek();
 				openCards.clear();
 				openCards.push(upperCard);
+			} else if (msg.getContent().endsWith(Dealer.LAST_CARD_MESSAGE_CONTENT)) {
+				isLastCardPlayerPresent = true;
 			}
           }
 	}
@@ -78,6 +85,7 @@ public class GPlayer extends Player {
 		System.out.println("\tRequesting registration at dealer");
 		this.handCards = new ArrayList<String>();
 		this.openCards = new Stack<String>();
+		this.isLastCardPlayerPresent = false;
 		// Register self on administrator
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 		msg.addReceiver(new AID(Dealer.DEALER_LOCAL_NAME, AID.ISLOCALNAME));
@@ -170,23 +178,50 @@ public class GPlayer extends Player {
 			}
 		}
 		
-		//Play the color that's the least common in game and no 7 or 8
-		playCard = tryPlayingLeastCommonColor(openCard, mostCommonColors);
-		if (playCard.getCard() != null) {
-			return playCard;
+		if (this.isLastCardPlayerPresent) {
+			this.isLastCardPlayerPresent = false;
+			//Play 7
+			playCard = tryPlayingSeven(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}
+			//Maybe play a 8...
+			playCard = tryPlayingEight(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}
+			//Play the color that's the least common in game
+			playCard = tryPlayingLeastCommonColor(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}
+			//Maybe play a jack
+			playCard = tryPlayingJack(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}			
+		} else {
+			//Play the color that's the least common in game and no 7 or 8
+			playCard = tryPlayingLeastCommonColor(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}
+			//Maybe play a 8...
+			playCard = tryPlayingEight(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}
+			//Maybe play a 7...
+			playCard = tryPlayingSeven(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}
+			//Maybe play a jack
+			playCard = tryPlayingJack(openCard, mostCommonColors);
+			if (playCard.getCard() != null) {
+				return playCard;
+			}
 		}
-		//Maybe play a 8...
-		playCard = tryPlayingEight(openCard, mostCommonColors);
-		if (playCard.getCard() != null) {
-			return playCard;
-		}
-		//Maybe play a 7...
-		playCard = tryPlayingSeven(openCard, mostCommonColors);
-		if (playCard.getCard() != null) {
-			return playCard;
-		}
-		//Maybe play a jack
-		playCard = tryPlayingJack(openCard, mostCommonColors);
 
 		//really no cards to play
 		return playCard;
@@ -227,9 +262,8 @@ public class GPlayer extends Player {
 		SelectedCard playCard = new SelectedCard();
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
 			for (int j = 0; j < handCards.size(); j++) {
-				//Dont check jacks and don't play 7
-				if ((this.handCards.get(j).charAt(1) != 'B') 
-						&& (this.handCards.get(j).charAt(1) != '7')) {
+				//Only check 8
+				if (this.handCards.get(j).charAt(1) == '8') {
 					//check card if the handcard color is the same as the least common color
 					if (this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) {
 						//check card if the handcard picture is the same as the openCard picture
@@ -257,8 +291,8 @@ public class GPlayer extends Player {
 		SelectedCard playCard = new SelectedCard();
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
 			for (int j = 0; j < handCards.size(); j++) {
-				//Dont check jacks
-				if ((this.handCards.get(j).charAt(1) != 'B')) {
+				//Only check 7
+				if ((this.handCards.get(j).charAt(1) == '7')) {
 					//check card if the handcard color is the same as the least common color
 					if (this.handCards.get(j).charAt(0) == entry.getKey().charAt(0)) {
 						//check card if the handcard picture is the same as the openCard picture
