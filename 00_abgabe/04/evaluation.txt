@@ -1,4 +1,4 @@
-Intelligent Systems SoSe 2015
+﻿Intelligent Systems SoSe 2015
 Übung 04
 Armin Pistoor, Christoph Küpker
 ======
@@ -6,6 +6,10 @@ Evaluation
 ======
 
 Wir haben unseren Agenten testweise von allen Startpositionen gegen die Dummy-Agenten spielen lassen. Der genaue Ablauf kann in de.unioldenburg.jade.maumau.evaluation.MauMauAgentEvaluator eingesehen werden. Die hier angegebenen Ergebnisse beziehen sich auf einen Durchlauf mit 10000 Spielen pro Startposition für den smarten Agenten.
+
+Die Strategie, die unser Agent verfolgt beruht darauf, immer die Farbe zu spielen, die wahrscheinlich am wenigsten im Spiel (auf der Hand der anderen Spieler, sowie im Stapel der gelegten Karten) vorkommt. Somit erhöht sich die Chance eine passende Karte auf die Karten, die die anderen Spieler legen, zu haben.
+Zusätzlich versucht unser Agent erst einmal "normale" Karten zu spielen, bevor er 7en und 8en spielt, um auf eine solche Karte einen Konter zu haben. Buben werden nur gespielt, wenn sonst keine andere Karte passt.
+Falls allerdings ein anderer Spieler nur noch eine Karte hat, werden bevorzugt 7en und 8en gespielt, um den Spieler vom Gewinnen abzuhalten.
 
 Der Erwartungswert für einen Dummy-Agenten ist eine Gewinnrate von ca. 33% da die Wahrscheinlichkeit zum Gewinnen, ohne Betrachtung der Startposition, für alle Dummy-Agenten gleich ist. Für unseren Agenten ergaben sich folgende Gewinnraten:
 
