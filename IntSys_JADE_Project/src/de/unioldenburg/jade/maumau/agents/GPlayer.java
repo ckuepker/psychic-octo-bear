@@ -4,9 +4,7 @@ import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -157,7 +155,6 @@ public class GPlayer extends Player {
 	 */
 	protected SelectedCard getIntelligentStrategy(String openCard, boolean exec) {
 		SelectedCard playCard = new SelectedCard();
-		List<Integer> jacks = new ArrayList<Integer>(4);
 		Map<String, Integer> mostCommonColors = this.getColorMap();
 		
 		//react to 7 and 8
@@ -172,15 +169,31 @@ public class GPlayer extends Player {
 						+ "given card " + openCard);
 			}
 		}
-			
-		//Find Jacks
-		for (int i = 0; i < this.handCards.size(); i++) {
-			if (handCards.get(i).charAt(1) == 'B') {
-				jacks.add(i);
-			}
-		}
 		
 		//Play the color that's the least common in game and no 7 or 8
+		playCard = tryPlayingLeastCommonColor(openCard, mostCommonColors);
+		if (playCard.getCard() != null) {
+			return playCard;
+		}
+		//Maybe play a 8...
+		playCard = tryPlayingEight(openCard, mostCommonColors);
+		if (playCard.getCard() != null) {
+			return playCard;
+		}
+		//Maybe play a 7...
+		playCard = tryPlayingSeven(openCard, mostCommonColors);
+		if (playCard.getCard() != null) {
+			return playCard;
+		}
+		//Maybe play a jack
+		playCard = tryPlayingJack(openCard, mostCommonColors);
+
+		//really no cards to play
+		return playCard;
+	}
+
+	private SelectedCard tryPlayingLeastCommonColor(String openCard, Map<String, Integer> mostCommonColors) {
+		SelectedCard playCard = new SelectedCard();
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
 			for (int j = 0; j < handCards.size(); j++) {
 				//Dont check jacks and don't play 7 or 8
@@ -206,8 +219,12 @@ public class GPlayer extends Player {
 				}
 			}			
 		}
-		
-		//Maybe play a 8...
+		playCard.setCard(null);
+		return playCard;
+	}
+	
+	private SelectedCard tryPlayingEight(String openCard, Map<String, Integer> mostCommonColors) {
+		SelectedCard playCard = new SelectedCard();
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
 			for (int j = 0; j < handCards.size(); j++) {
 				//Dont check jacks and don't play 7
@@ -232,8 +249,12 @@ public class GPlayer extends Player {
 				}
 			}			
 		}
-		
-		//Maybe play a 7...
+		playCard.setCard(null);
+		return playCard;		
+	}
+	
+	private SelectedCard tryPlayingSeven(String openCard, Map<String, Integer> mostCommonColors) {
+		SelectedCard playCard = new SelectedCard();
 		for (Map.Entry<String, Integer> entry : mostCommonColors.entrySet()) {
 			for (int j = 0; j < handCards.size(); j++) {
 				//Dont check jacks
@@ -257,25 +278,32 @@ public class GPlayer extends Player {
 				}
 			}			
 		}
-		
-		//No card to play - check if there is a jack
-		if (jacks.size() > 0) {
-			int index = jacks.get(0);
-			this.openCards.add(this.handCards.get(index));
-			playCard.setCard(this.handCards.remove(index));
-			playCard.setJack(true);
-			jacks.clear();
-			String color = this.getWishingColor();
-			playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
-					+ playCard.getCard() + "! I would like to wish the color "
-					+ color + "! " + handCards.size() + " cards left");
-			playCard.setWishedColor(color);
-		} else {
-			//really no cards to play
-			playCard.setCard(null);
-		}
+		playCard.setCard(null);
 		return playCard;
 	}
+	
+	private SelectedCard tryPlayingJack(String openCard, Map<String, Integer> mostCommonColors) {
+		SelectedCard playCard = new SelectedCard();
+		for (int i = 0; i < this.handCards.size(); i++) {
+			if (handCards.get(i).charAt(1) == 'B') {
+				this.openCards.add(this.handCards.get(i));
+				playCard.setCard(this.handCards.remove(i));
+				playCard.setJack(true);
+				String color = this.getWishingColor();
+				playCard.setMessage(this.getLocalName() + "[GPlayer]: playing card "
+						+ playCard.getCard() + "! I would like to wish the color "
+						+ color + "! " + handCards.size() + " cards left");
+				playCard.setWishedColor(color);
+				return playCard;
+			}
+		}
+		playCard.setCard(null);
+		return playCard;
+	}
+
+
+
+	
 
 	/**
 	 * Generates a Map with the different colors and the related number sorted by commonness.
