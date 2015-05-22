@@ -13,10 +13,10 @@ Falls allerdings ein anderer Spieler nur noch eine Karte hat, werden bevorzugt 7
 
 Der Erwartungswert für einen Dummy-Agenten ist eine Gewinnrate von ca. 33% da die Wahrscheinlichkeit zum Gewinnen, ohne Betrachtung der Startposition, für alle Dummy-Agenten gleich ist. Für unseren Agenten ergaben sich folgende Gewinnraten:
 
-Position #0 (Fängt an): 41,8%
-Position #1: 39,8%
-Position #2 (Als letzter dran): 33,7%
+Position #0 (Fängt an): 41,3%
+Position #1: 40,5%
+Position #2 (Als letzter dran): 37,6%
 
-Damit ergibt sich, mit Ausnahme von Position 2, eine leicht erhöhte Gewinnchance für unseren Agenten.
+Damit ergibt sich auf allen Startpositionen eine leicht verbesserte Gewinnrate gegenüber den Dummy-Agenten.
 
 

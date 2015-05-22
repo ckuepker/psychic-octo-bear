@@ -15,7 +15,7 @@ import de.unioldenburg.jade.starter.AgentRuntimeCreator;
 public class MauMauAgentEvaluator extends Agent {
 	
 	public final static String EVALUATOR_LOCAL_NAME = "evaluator";
-	private final static int RUNS_PER_STARTING_POSITION = 10000;
+	private final static int RUNS_PER_STARTING_POSITION = 1000;
 	private final static long TIME_BETWEEN_RUNS = 75;
 	private final static int[] wins = {0,0,0};
 	
