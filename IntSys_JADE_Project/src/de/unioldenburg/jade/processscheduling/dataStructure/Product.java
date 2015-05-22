@@ -25,13 +25,19 @@ public class Product {
 	private int time;
 	
 	/**
+	 * The complexity of the product. Needed to calculate the time needed to produce the product.
+	 */
+	private double complexity;
+	
+	/**
 	 * Constructor.
 	 * @param productName - the productName.
 	 * @param varieties - the varietySet.
 	 */
-	public Product(String productName, ArrayList<Variety> varieties) {
+	public Product(String productName, ArrayList<Variety> varieties, double complexity) {
 		this.productName = productName;
 		this.varieties = varieties;
+		this.complexity = complexity;
 		this.time = 0;
 	}
 	
@@ -54,22 +60,26 @@ public class Product {
 		return this.varieties;
 	}
 	
+	public double getComplexity() {
+		return this.complexity;
+	}
+	
 	/**
 	 * Get productSet 1.
 	 * @return the productSet.
 	 */
 	public final static ArrayList<Product> GET_PRODUCT_SET_1() {
 		ArrayList<Product> productSet = new ArrayList<Product>();
-		productSet.add(new Product("P01", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P02", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P03", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P04", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P05", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P06", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P07", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P08", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P09", Variety.GET_VARIETY_SET_1()));
-		productSet.add(new Product("P10", Variety.GET_VARIETY_SET_1()));
+		productSet.add(new Product("P01", Variety.GET_VARIETY_SET_1(), 1.0));
+		productSet.add(new Product("P02", Variety.GET_VARIETY_SET_1(), 1.2));
+		productSet.add(new Product("P03", Variety.GET_VARIETY_SET_1(), 1.5));
+		productSet.add(new Product("P04", Variety.GET_VARIETY_SET_1(), 2.2));
+		productSet.add(new Product("P05", Variety.GET_VARIETY_SET_1(), 2.0));
+		productSet.add(new Product("P06", Variety.GET_VARIETY_SET_1(), 1.8));
+		productSet.add(new Product("P07", Variety.GET_VARIETY_SET_1(), 1.4));
+		productSet.add(new Product("P08", Variety.GET_VARIETY_SET_1(), 2.7));
+		productSet.add(new Product("P09", Variety.GET_VARIETY_SET_1(), 2.4));
+		productSet.add(new Product("P10", Variety.GET_VARIETY_SET_1(), 3.1));
 		return productSet;
 	}
 

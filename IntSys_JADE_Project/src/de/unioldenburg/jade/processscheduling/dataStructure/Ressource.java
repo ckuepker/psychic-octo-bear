@@ -20,16 +20,26 @@ public class Ressource {
 	private String outputString;
 	
 	/**
+	 * The running time the machine needs
+	 */
+	private double runningTime;
+	
+	/**
 	 * Constructor.
 	 * @param ressourceName - the ressourceName.
 	 */
-	private Ressource(String ressourceName) {
+	private Ressource(String ressourceName, double runningTime) {
 		this.ressourceName = ressourceName;
+		this.runningTime = runningTime;
 		this.outputString = "";
 	}
 	
 	public String getRessourceName() {
 		return this.ressourceName;
+	}
+	
+	public double getRunningTime() {
+		return this.runningTime;
 	}
 	
 	/**
@@ -38,10 +48,10 @@ public class Ressource {
 	 */
 	public final static ArrayList<Ressource> GET_Ressource_SET_1() {
 		ArrayList<Ressource> ressourceSet = new ArrayList<Ressource>();
-		ressourceSet.add(new Ressource("M1"));
-		ressourceSet.add(new Ressource("M2"));
-		ressourceSet.add(new Ressource("M3"));
-		ressourceSet.add(new Ressource("M4"));
+		ressourceSet.add(new Ressource("M1", 1.0));
+		ressourceSet.add(new Ressource("M2", 2.0));
+		ressourceSet.add(new Ressource("M3", 1.5));
+//		ressourceSet.add(new Ressource("M4", 1.2));
 		return ressourceSet;
 	}
 

@@ -68,7 +68,7 @@ public class Schedule {
 		timeline.append("T:  ");
 		// -3 because of the Tag 'M1:'
 		// /6 because 1 time unit equals 6 spaces
-		for (int i = 1; i < ((maxTime - 3) / 6); i++) {
+		for (int i = 1; i <= ((maxTime - 3) / 6); i++) {
 			if (i < 10) {
 				timeline.append("  " + i + "   ");
 			} else if (i < 100) {
@@ -89,10 +89,12 @@ public class Schedule {
 		for (Product product : this.products) {
 			Variety variety = product.getVarieties().get(0);
 			for (int i = 0; i < variety.getOperations().size(); i++) {
-				Ressource ressource = variety.getOperations().get(i).getRessources().get(i);
+				Operation operation = variety.getOperations().get(i);
+				Ressource ressource = operation.getRessources().get(i);
 				if (ressource.getRessourceName().equals(currentRessource.getRessourceName())) {
 //					int timeNeeded = 2;
-					int timeNeeded = (int)(Math.random() * 3 + 1);
+//					int timeNeeded = (int)(Math.random() * 3 + 1);
+					int timeNeeded = (int)(product.getComplexity()*ressource.getRunningTime()*operation.getExecutionTime());
 					currentRessource.addStringToOutputString(product.getProductName()
 							, product.getTime(), timeNeeded);
 					product.addTime(timeNeeded);
