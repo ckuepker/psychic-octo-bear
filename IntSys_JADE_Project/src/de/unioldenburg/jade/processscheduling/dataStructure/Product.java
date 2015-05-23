@@ -17,7 +17,7 @@ public class Product {
 	/**
 	 * List of different varieties.
 	 */
-	private ArrayList<Variety> varieties;
+	private ArrayList<Variant> varieties;
 	
 	/**
 	 * The time the product already used.
@@ -34,7 +34,7 @@ public class Product {
 	 * @param productName - the productName.
 	 * @param varieties - the varietySet.
 	 */
-	public Product(String productName, ArrayList<Variety> varieties, double complexity) {
+	public Product(String productName, ArrayList<Variant> varieties, double complexity) {
 		this.productName = productName;
 		this.varieties = varieties;
 		this.complexity = complexity;
@@ -56,7 +56,7 @@ public class Product {
 		return this.productName;
 	}
 	
-	public ArrayList<Variety> getVarieties() {
+	public ArrayList<Variant> getVarieties() {
 		return this.varieties;
 	}
 	
@@ -70,16 +70,16 @@ public class Product {
 	 */
 	public final static ArrayList<Product> GET_PRODUCT_SET_1() {
 		ArrayList<Product> productSet = new ArrayList<Product>();
-		productSet.add(new Product("P01", Variety.GET_VARIETY_SET_1(), 1.0));
-		productSet.add(new Product("P02", Variety.GET_VARIETY_SET_1(), 1.2));
-		productSet.add(new Product("P03", Variety.GET_VARIETY_SET_1(), 1.5));
-		productSet.add(new Product("P04", Variety.GET_VARIETY_SET_1(), 2.2));
-		productSet.add(new Product("P05", Variety.GET_VARIETY_SET_1(), 2.0));
-		productSet.add(new Product("P06", Variety.GET_VARIETY_SET_1(), 1.8));
-		productSet.add(new Product("P07", Variety.GET_VARIETY_SET_1(), 1.4));
-		productSet.add(new Product("P08", Variety.GET_VARIETY_SET_1(), 2.7));
-		productSet.add(new Product("P09", Variety.GET_VARIETY_SET_1(), 2.4));
-		productSet.add(new Product("P10", Variety.GET_VARIETY_SET_1(), 3.1));
+		productSet.add(new Product("P01", Variant.GET_VARIETY_SET_1(), 1.0));
+		productSet.add(new Product("P02", Variant.GET_VARIETY_SET_1(), 1.2));
+		productSet.add(new Product("P03", Variant.GET_VARIETY_SET_1(), 1.5));
+		productSet.add(new Product("P04", Variant.GET_VARIETY_SET_1(), 2.2));
+		productSet.add(new Product("P05", Variant.GET_VARIETY_SET_1(), 2.0));
+		productSet.add(new Product("P06", Variant.GET_VARIETY_SET_1(), 1.8));
+		productSet.add(new Product("P07", Variant.GET_VARIETY_SET_1(), 1.4));
+		productSet.add(new Product("P08", Variant.GET_VARIETY_SET_1(), 2.7));
+		productSet.add(new Product("P09", Variant.GET_VARIETY_SET_1(), 2.4));
+		productSet.add(new Product("P10", Variant.GET_VARIETY_SET_1(), 3.1));
 		return productSet;
 	}
 

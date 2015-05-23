@@ -6,10 +6,10 @@ import java.util.ArrayList;
  * The variety to produce the product.
  * @author Armin Pistoor
  */
-public class Variety {
+public class Variant {
 	
 	/**
-	 * Variety name.
+	 * Variant name.
 	 */
 	private String varietyName;
 	
@@ -23,7 +23,7 @@ public class Variety {
 	 * @param varietyName - the varietyName.
 	 * @param operations - the operationSet.
 	 */
-	private Variety(String varietyName, ArrayList<Operation> operations) {
+	private Variant(String varietyName, ArrayList<Operation> operations) {
 		this.varietyName = varietyName;
 		this.operations = operations;
 	}
@@ -40,9 +40,9 @@ public class Variety {
 	 * Get VarietySet 1.
 	 * @return the varietySet.
 	 */
-	public final static ArrayList<Variety> GET_VARIETY_SET_1() {
-		ArrayList<Variety> varietySet = new ArrayList<Variety>();
-		varietySet.add(new Variety("1", Operation.GET_OPERATION_SET_1()));
+	public final static ArrayList<Variant> GET_VARIETY_SET_1() {
+		ArrayList<Variant> varietySet = new ArrayList<Variant>();
+		varietySet.add(new Variant("1", Operation.GET_OPERATION_SET_1()));
 		return varietySet;
 	}
 
