@@ -11,7 +11,7 @@ public class Variant {
 	/**
 	 * Variant name.
 	 */
-	private String varietyName;
+	private String variantName;
 	
 	/**
 	 * List of operations to perform.
@@ -20,16 +20,16 @@ public class Variant {
 	
 	/**
 	 * Constructor.
-	 * @param varietyName - the varietyName.
+	 * @param variantName - the name of the variant.
 	 * @param operations - the operationSet.
 	 */
-	private Variant(String varietyName, ArrayList<Operation> operations) {
-		this.varietyName = varietyName;
+	private Variant(String variantName, ArrayList<Operation> operations) {
+		this.variantName = variantName;
 		this.operations = operations;
 	}
 	
-	public String getVarietyName() {
-		return this.varietyName;
+	public String getVariantName() {
+		return this.variantName;
 	}
 	
 	public ArrayList<Operation> getOperations() {
@@ -37,13 +37,13 @@ public class Variant {
 	}
 	
 	/**
-	 * Get VarietySet 1.
-	 * @return the varietySet.
+	 * Get VariantSet 1.
+	 * @return the variantSet.
 	 */
-	public final static ArrayList<Variant> GET_VARIETY_SET_1() {
-		ArrayList<Variant> varietySet = new ArrayList<Variant>();
-		varietySet.add(new Variant("1", Operation.GET_OPERATION_SET_1()));
-		return varietySet;
+	public final static ArrayList<Variant> GET_VARIANT_SET_1() {
+		ArrayList<Variant> variantSet = new ArrayList<Variant>();
+		variantSet.add(new Variant("1", Operation.GET_OPERATION_SET_1()));
+		return variantSet;
 	}
 
 }

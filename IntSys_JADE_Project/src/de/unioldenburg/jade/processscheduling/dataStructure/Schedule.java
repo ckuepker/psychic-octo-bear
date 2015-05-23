@@ -87,7 +87,7 @@ public class Schedule {
 	 */
 	private void findPathUsingRessource(Ressource currentRessource) {
 		for (Product product : this.products) {
-			Variant variety = product.getVarieties().get(0);
+			Variant variety = product.getVariants().get(0);
 			for (int i = 0; i < variety.getOperations().size(); i++) {
 				Operation operation = variety.getOperations().get(i);
 				Ressource ressource = operation.getRessources().get(i);
@@ -111,7 +111,7 @@ public class Schedule {
 		ArrayList<Ressource> ressources = new ArrayList<Ressource>();
 		ArrayList<String> ressourceNames = new ArrayList<String>();
 		for (Product product : this.products) {
-			for (Variant variety : product.getVarieties()) {
+			for (Variant variety : product.getVariants()) {
 				for (Operation operation : variety.getOperations()) {
 					for (Ressource ressource : operation.getRessources()) {
 						if (!ressourceNames.contains(ressource.getRessourceName())) {
