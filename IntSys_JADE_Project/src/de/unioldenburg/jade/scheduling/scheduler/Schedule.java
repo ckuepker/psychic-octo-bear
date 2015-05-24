@@ -36,4 +36,12 @@ public class Schedule {
         System.out.print("\n\n");
     }
 
+    public List<ResourceAllocationPlan> getResourceAllocations() {
+        return resourceAllocations;
+    }
+
+    public List<PlannedJob> getPlannedJobs() {
+        return plannedJobs;
+    }
+
 }

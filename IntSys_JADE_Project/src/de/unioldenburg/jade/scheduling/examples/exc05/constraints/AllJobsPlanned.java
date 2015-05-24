@@ -12,7 +12,7 @@ public class AllJobsPlanned extends Constraint {
 
     @Override
     public boolean isValid(ProcessPlanningProblem problem, Schedule schedule) {
-        return true;
+        return problem.getJobs().size() == schedule.getPlannedJobs().size();
     }
 
     @Override
