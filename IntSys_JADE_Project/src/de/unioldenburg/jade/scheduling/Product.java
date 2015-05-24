@@ -30,7 +30,7 @@ public class Product {
         s += "Product("+getName()+")\n"+getVariations().size()+" variation(s) "
                 + "available\n";
         for (Variation v : getVariations()) {
-            s += "\tVariation: "+v.getOperations().size()+" operations (resource, duration):\n";
+            s += "\tVariation: "+v.getOperations().size()+" operations ([resource, duration]):\n";
             for (Operation o : v.getOperations()) {
                 s += "\t\tOperation("+o.getResources().toString()+")\n";
             }            

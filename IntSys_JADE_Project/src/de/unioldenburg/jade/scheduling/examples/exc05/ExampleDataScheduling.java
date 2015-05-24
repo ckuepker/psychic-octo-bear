@@ -7,6 +7,7 @@ import de.unioldenburg.jade.scheduling.Resource;
 import de.unioldenburg.jade.scheduling.ResourceTimePair;
 import de.unioldenburg.jade.scheduling.Schedule;
 import de.unioldenburg.jade.scheduling.Variation;
+import de.unioldenburg.jade.scheduling.scheduler.SimpleFCFSScheduler;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -117,7 +118,9 @@ public class ExampleDataScheduling {
         }
         
         System.out.println("Creating Schedule for planning...");
-        Schedule s = new Schedule(jobs, products, resources, null, null);
+        Schedule s = new Schedule(jobs, products, resources, null, null, 
+                new SimpleFCFSScheduler());
+        s.printSchedule();
     }
     
     public static Set<Resource> getResources() {
@@ -140,15 +143,15 @@ public class ExampleDataScheduling {
     public static List<Job> getJobs() {
         ArrayList<Job> jobs = new ArrayList<Job>(10);
         jobs.add(new Job("A1", p1, 1, 0, 12));
-        jobs.add(new Job("A2", p1, 1, 3, 27));
+        jobs.add(new Job("A2", p1, 1, 0, 27));
         jobs.add(new Job("A3", p2, 1, 0, 132));
-        jobs.add(new Job("A4", p3, 1, 47, 52));
-        jobs.add(new Job("A5", p2, 1, 24, 123));
-        jobs.add(new Job("A6", p2, 1, 32, 1024));
+        jobs.add(new Job("A4", p3, 1, 16, 52));
+        jobs.add(new Job("A5", p2, 1, 17, 123));
+        jobs.add(new Job("A6", p2, 1, 27, 1024));
         jobs.add(new Job("A7", p3, 1, 18, 27));
         jobs.add(new Job("A8", p3, 1, 0, 12));
         jobs.add(new Job("A9", p1, 1, 17, 147));
-        jobs.add(new Job("A10", p2, 1, 48, 2048));
+        jobs.add(new Job("A10", p2, 1, 12, 2048));
         return jobs;
     }
     
