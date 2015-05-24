@@ -9,6 +9,8 @@ import de.unioldenburg.jade.scheduling.ResourceTimePair;
 import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import de.unioldenburg.jade.scheduling.Variation;
 import de.unioldenburg.jade.scheduling.examples.exc05.constraints.AllJobsPlanned;
+import de.unioldenburg.jade.scheduling.examples.exc05.constraints.FulfilledDeadlines;
+import de.unioldenburg.jade.scheduling.examples.exc05.constraints.NoDoubleResourceAllocation;
 import de.unioldenburg.jade.scheduling.scheduler.Schedule;
 import de.unioldenburg.jade.scheduling.scheduler.Scheduler;
 import de.unioldenburg.jade.scheduling.scheduler.SimpleFCFSScheduler;
@@ -124,7 +126,9 @@ public class ExampleDataScheduling {
         System.out.println("\nLoading constraints");
         Set<Constraint> hardConstraints = new HashSet<Constraint>(3);
         hardConstraints.add(new AllJobsPlanned());
+        hardConstraints.add(new NoDoubleResourceAllocation());
         Set<Constraint> softConstraints = new HashSet<Constraint>(1);
+        softConstraints.add(new FulfilledDeadlines());
         
         System.out.println("Creating Schedule for planning...");
         ProcessPlanningProblem p = new ProcessPlanningProblem(jobs, products, 

@@ -73,4 +73,10 @@ public class ResourceAllocationPlan {
         }        
         return s;
     }
+
+    public List<JobToResourceAllocation> getJobs() {
+        return jobs;
+    }
+    
+    
 }
