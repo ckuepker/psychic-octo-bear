@@ -1,10 +1,24 @@
 package de.unioldenburg.jade.scheduling;
 
+import de.unioldenburg.jade.scheduling.scheduler.Schedule;
+
 /**
  *
  * @author Christoph Küpker
  */
-public interface Constraint {
+public abstract class Constraint {
     
-    public boolean isValid(ProcessPlanningProblem s);
+    /**
+     * Checks whether the given problem and schedule, this constraint remains
+     * unviolated.
+     * @return true iff the constraint is unviolated
+     */
+    public abstract boolean isValid(ProcessPlanningProblem problem, Schedule schedule);
+    
+    /**
+     * Gives a natural language description of this constraint which should even
+     * be understandable by the end user.
+     * @return 
+     */
+    public abstract String getDescription();
 }

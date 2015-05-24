@@ -1,5 +1,6 @@
 package de.unioldenburg.jade.scheduling.scheduler;
 
+import de.unioldenburg.jade.scheduling.Constraint;
 import de.unioldenburg.jade.scheduling.Job;
 import de.unioldenburg.jade.scheduling.Operation;
 import de.unioldenburg.jade.scheduling.Product;
@@ -19,14 +20,14 @@ import java.util.Set;
  */
 public class SimpleFCFSScheduler implements Scheduler {
     
-    private Map<Resource, ResourceAllocationPlan> plans 
-            = new HashMap<Resource, ResourceAllocationPlan>();
-
     @Override
-    public List<ResourceAllocationPlan> schedule(ProcessPlanningProblem s) {
+    public Schedule createSchedule(ProcessPlanningProblem s) {
+        Map<Resource, ResourceAllocationPlan> plans 
+                = new HashMap<Resource, ResourceAllocationPlan>();
+        List<PlannedJob> completedJobs = new ArrayList<PlannedJob>();
         Set<Resource> resources = s.getResources();
         for (Resource r : resources) {
-            this.plans.put(r, new ResourceAllocationPlan(r));
+            plans.put(r, new ResourceAllocationPlan(r));
         }
         for (Job j : s.getJobs()) {
             int releaseTime = j.getStartDate();
@@ -38,11 +39,36 @@ public class SimpleFCFSScheduler implements Scheduler {
                 int duration = requirement.getTime();
                 System.out.println("Putting job "+j.getIdentifier()+" on machine "+r.getName()
                         +" starting not before "+releaseTime+" running for "+duration);
-                releaseTime = this.plans.get(r).append(j, duration, releaseTime);
+                releaseTime = plans.get(r).append(j, duration, releaseTime);
             }
-            // All operations planned. 
+            // All operations planned. Add job as completed job to schedule
+            completedJobs.add(new PlannedJob(j, releaseTime));
         }
-        return new ArrayList<ResourceAllocationPlan>(this.plans.values());
+        Schedule schedule = new Schedule(new ArrayList<ResourceAllocationPlan>(plans.values()), 
+                completedJobs);
+        try {
+            this.validateConstraints(schedule, s);
+        } catch (HardConstraintViolatedException ex) {
+            System.out.println("FAILURE: The following hard constraint was "
+                    + "violated:\t\n\t\""+ex.getMessage()+"\"\nNo Schedule will be "
+                    + "created.");
+            return null;
+        }
+        return schedule;
     }
     
+    private void validateConstraints(Schedule schedule, ProcessPlanningProblem problem) 
+            throws HardConstraintViolatedException {
+        for (Constraint c : problem.getHardConstraints()) {
+            if (!c.isValid(problem, schedule)) {
+                throw new HardConstraintViolatedException(c);
+            }
+        }
+        for (Constraint c : problem.getSoftConstraints()) {
+            if (!c.isValid(problem, schedule)) {
+                System.out.println("WARNING: The following soft constraint is "
+                        + "being violated by the current schedule:\n\t"+c.getDescription());
+            }
+        }
+    }
 }

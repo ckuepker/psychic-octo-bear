@@ -16,43 +16,17 @@ public class ProcessPlanningProblem {
     private Set<Resource> resources;
     private Set<Constraint> hardConstraints;
     private Set<Constraint> softConstraints;
-    private Scheduler scheduler;
 
     public ProcessPlanningProblem(List<Job> jobs, Set<Product> products, 
             Set<Resource> resources, Set<Constraint> hardConstraints, 
-            Set<Constraint> softConstraints, Scheduler scheduler) {
+            Set<Constraint> softConstraints) {
         this.jobs = jobs;
         this.products = products;
         this.resources = resources;
         this.hardConstraints = hardConstraints;
         this.softConstraints = softConstraints;
-        this.scheduler = scheduler;
     }
     
-    private List<ResourceAllocationPlan> schedule() {
-        return scheduler.schedule(this);
-    }
-    
-    public void printSchedule() {
-        List<ResourceAllocationPlan> plan = this.schedule();
-        int maxTime = 0;
-        for (ResourceAllocationPlan allocation : plan) {
-            System.out.println(allocation);
-            if (allocation.getTime() > maxTime) {
-                maxTime = allocation.getTime();
-            }
-        }
-        System.out.print("t:  |");
-        for (int i = 0; i < maxTime; i++) {
-            if (i < 10) {
-                System.out.print(i+"  |");
-            } else if (i < 100) {
-                System.out.print(i+" |");
-            }
-        }
-        System.out.print("\n\n");
-    }
-
     public List<Job> getJobs() {
         return jobs;
     }
@@ -71,9 +45,5 @@ public class ProcessPlanningProblem {
 
     public Set<Constraint> getSoftConstraints() {
         return softConstraints;
-    }
-
-    public Scheduler getScheduler() {
-        return scheduler;
     }
 }

@@ -1,5 +1,6 @@
 package de.unioldenburg.jade.scheduling.examples.exc05;
 
+import de.unioldenburg.jade.scheduling.Constraint;
 import de.unioldenburg.jade.scheduling.Job;
 import de.unioldenburg.jade.scheduling.Operation;
 import de.unioldenburg.jade.scheduling.Product;
@@ -7,6 +8,9 @@ import de.unioldenburg.jade.scheduling.Resource;
 import de.unioldenburg.jade.scheduling.ResourceTimePair;
 import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import de.unioldenburg.jade.scheduling.Variation;
+import de.unioldenburg.jade.scheduling.examples.exc05.constraints.AllJobsPlanned;
+import de.unioldenburg.jade.scheduling.scheduler.Schedule;
+import de.unioldenburg.jade.scheduling.scheduler.Scheduler;
 import de.unioldenburg.jade.scheduling.scheduler.SimpleFCFSScheduler;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -117,11 +121,22 @@ public class ExampleDataScheduling {
             System.out.println(j);
         }
         
+        System.out.println("\nLoading constraints");
+        Set<Constraint> hardConstraints = new HashSet<Constraint>(3);
+        hardConstraints.add(new AllJobsPlanned());
+        Set<Constraint> softConstraints = new HashSet<Constraint>(1);
+        
         System.out.println("Creating Schedule for planning...");
-        ProcessPlanningProblem s = new ProcessPlanningProblem(jobs, products, resources, null, null, 
-                new SimpleFCFSScheduler());
+        ProcessPlanningProblem p = new ProcessPlanningProblem(jobs, products, 
+                resources, hardConstraints, softConstraints);
+        Scheduler s = new SimpleFCFSScheduler();
+        Schedule schedule = s.createSchedule(p);
         System.out.println("\nFinal schedule created:");
-        s.printSchedule();
+        if (schedule != null) {
+            schedule.printSchedule();
+        } else {
+            System.out.println("No schedule was created");
+        }
     }
     
     public static Set<Resource> getResources() {

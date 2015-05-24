@@ -4,10 +4,9 @@ import de.unioldenburg.jade.scheduling.Job;
 import de.unioldenburg.jade.scheduling.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import sun.nio.ch.Util;
 
 /**
- *
+ * Allocates sequences Job(operations) to resources and tracks time of a resource
  * @author Christoph Küpker
  */
 public class ResourceAllocationPlan {

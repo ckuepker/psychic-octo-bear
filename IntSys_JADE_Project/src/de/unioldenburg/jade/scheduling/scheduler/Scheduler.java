@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface Scheduler {
     
-    public List<ResourceAllocationPlan> schedule(ProcessPlanningProblem s);
+    public Schedule createSchedule(ProcessPlanningProblem s);
 }
