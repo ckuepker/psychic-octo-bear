@@ -1,6 +1,6 @@
 package de.unioldenburg.jade.scheduling.scheduler;
 
-import de.unioldenburg.jade.scheduling.Schedule;
+import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import java.util.List;
 
 /**
@@ -9,5 +9,5 @@ import java.util.List;
  */
 public interface Scheduler {
     
-    public List<ResourceAllocationPlan> schedule(Schedule s);
+    public List<ResourceAllocationPlan> schedule(ProcessPlanningProblem s);
 }

@@ -1,7 +1,7 @@
 package de.unioldenburg.jade.scheduling.examples.exc05.constraints;
 
 import de.unioldenburg.jade.scheduling.Constraint;
-import de.unioldenburg.jade.scheduling.Schedule;
+import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 
 /**
  *
@@ -10,7 +10,7 @@ import de.unioldenburg.jade.scheduling.Schedule;
 public class AllJobsPlanned implements Constraint {
 
     @Override
-    public boolean isValid(Schedule s) {
+    public boolean isValid(ProcessPlanningProblem s) {
         return false;
     }
     

@@ -21,16 +21,27 @@ public class ResourceAllocationPlan {
         this.resource = resource;
     }
     
-    public void append(Job j, int duration, int releaseTime) {
+    /**
+     * Appends the given Job (well actually an operation of the job but we don't
+     * care about Operations here) to the resource of this allocation plan, 
+     * not before release time and taking duration time on the resource. 
+     * @param job The job
+     * @param duration Time the Job requires on the ressource
+     * @param releaseTime Earliest time to start the job on this resource
+     * @return Time after the job is completed on this resource 
+     * ([postponement+]releaseTime+duration)
+     */
+    public int append(Job job, int duration, int releaseTime) {
         if (time < releaseTime) {
             System.out.println(resource.getName()+": Fast forwarding to "+releaseTime);
             time = releaseTime;
         } else if (time > releaseTime) {
-            System.out.println(resource.getName()+": Postponing "+j.getIdentifier()
+            System.out.println(resource.getName()+": Postponing "+job.getIdentifier()
                     + " to "+time+" because machine is busy");
         }
-        jobs.add(new JobToResourceAllocation(j, duration, time));
+        jobs.add(new JobToResourceAllocation(job, duration, time));
         time += duration;
+        return time;
     }
 
     public Resource getResource() {

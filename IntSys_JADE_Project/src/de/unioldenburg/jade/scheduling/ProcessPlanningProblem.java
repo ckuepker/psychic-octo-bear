@@ -9,7 +9,7 @@ import java.util.Set;
  *
  * @author Christoph Küpker
  */
-public class Schedule {
+public class ProcessPlanningProblem {
     
     private List<Job> jobs;
     private Set<Product> products;
@@ -18,7 +18,7 @@ public class Schedule {
     private Set<Constraint> softConstraints;
     private Scheduler scheduler;
 
-    public Schedule(List<Job> jobs, Set<Product> products, 
+    public ProcessPlanningProblem(List<Job> jobs, Set<Product> products, 
             Set<Resource> resources, Set<Constraint> hardConstraints, 
             Set<Constraint> softConstraints, Scheduler scheduler) {
         this.jobs = jobs;
@@ -51,10 +51,6 @@ public class Schedule {
             }
         }
         System.out.print("\n\n");
-    }
-    
-    public void printConstraintValidationResult() {
-        
     }
 
     public List<Job> getJobs() {

@@ -5,7 +5,7 @@ import de.unioldenburg.jade.scheduling.Operation;
 import de.unioldenburg.jade.scheduling.Product;
 import de.unioldenburg.jade.scheduling.Resource;
 import de.unioldenburg.jade.scheduling.ResourceTimePair;
-import de.unioldenburg.jade.scheduling.Schedule;
+import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import de.unioldenburg.jade.scheduling.Variation;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class SimpleFCFSScheduler implements Scheduler {
             = new HashMap<Resource, ResourceAllocationPlan>();
 
     @Override
-    public List<ResourceAllocationPlan> schedule(Schedule s) {
+    public List<ResourceAllocationPlan> schedule(ProcessPlanningProblem s) {
         Set<Resource> resources = s.getResources();
         for (Resource r : resources) {
             this.plans.put(r, new ResourceAllocationPlan(r));
@@ -37,10 +37,10 @@ public class SimpleFCFSScheduler implements Scheduler {
                 Resource r = requirement.getResource();
                 int duration = requirement.getTime();
                 System.out.println("Putting job "+j.getIdentifier()+" on machine "+r.getName()
-                        +" starting at "+releaseTime+" running for "+duration);
-                this.plans.get(r).append(j, duration, releaseTime);
-                releaseTime = this.plans.get(r).getTime();
+                        +" starting not before "+releaseTime+" running for "+duration);
+                releaseTime = this.plans.get(r).append(j, duration, releaseTime);
             }
+            // All operations planned. 
         }
         return new ArrayList<ResourceAllocationPlan>(this.plans.values());
     }

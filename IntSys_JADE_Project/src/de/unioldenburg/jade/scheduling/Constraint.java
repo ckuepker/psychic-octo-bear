@@ -6,5 +6,5 @@ package de.unioldenburg.jade.scheduling;
  */
 public interface Constraint {
     
-    public boolean isValid(Schedule s);
+    public boolean isValid(ProcessPlanningProblem s);
 }

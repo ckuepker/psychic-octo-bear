@@ -5,7 +5,7 @@ import de.unioldenburg.jade.scheduling.Operation;
 import de.unioldenburg.jade.scheduling.Product;
 import de.unioldenburg.jade.scheduling.Resource;
 import de.unioldenburg.jade.scheduling.ResourceTimePair;
-import de.unioldenburg.jade.scheduling.Schedule;
+import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import de.unioldenburg.jade.scheduling.Variation;
 import de.unioldenburg.jade.scheduling.scheduler.SimpleFCFSScheduler;
 import java.util.ArrayList;
@@ -118,8 +118,9 @@ public class ExampleDataScheduling {
         }
         
         System.out.println("Creating Schedule for planning...");
-        Schedule s = new Schedule(jobs, products, resources, null, null, 
+        ProcessPlanningProblem s = new ProcessPlanningProblem(jobs, products, resources, null, null, 
                 new SimpleFCFSScheduler());
+        System.out.println("\nFinal schedule created:");
         s.printSchedule();
     }
     
