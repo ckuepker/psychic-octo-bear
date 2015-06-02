@@ -11,7 +11,21 @@ public class Job {
     private int amount;
     private int startDate;
     private int endDate;
+    private int priority;
 
+    /**
+     * Constructor for ids as Integer and priority (needed for JSON-file)
+     * @author Armin Pistoor
+     */
+    public Job(int identifier, Product product, int amount, int startDate, int endDate, int priority) {
+        this.identifier = identifier + "";
+        this.product = product;
+        this.amount = amount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.priority = priority;
+    }
+    
     public Job(String identifier, Product product, int amount, int startDate, int endDate) {
         this.identifier = identifier;
         this.product = product;
@@ -21,7 +35,7 @@ public class Job {
     }
 
     public String getIdentifier() {
-        return identifier;
+        return this.identifier;
     }
 
     public Product getProduct() {
@@ -38,6 +52,10 @@ public class Job {
 
     public int getEndDate() {
         return endDate;
+    }
+    
+    public int getPriority() {
+        return this.priority;
     }
     
     @Override

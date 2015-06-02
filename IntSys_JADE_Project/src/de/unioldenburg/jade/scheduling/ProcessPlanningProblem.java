@@ -1,7 +1,5 @@
 package de.unioldenburg.jade.scheduling;
 
-import de.unioldenburg.jade.scheduling.scheduler.ResourceAllocationPlan;
-import de.unioldenburg.jade.scheduling.scheduler.Scheduler;
 import java.util.List;
 import java.util.Set;
 
