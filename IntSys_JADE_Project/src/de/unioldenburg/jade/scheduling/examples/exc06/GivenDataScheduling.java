@@ -1,4 +1,4 @@
-package de.unioldenburg.jade.scheduling.exc06;
+package de.unioldenburg.jade.scheduling.examples.exc06;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,14 +25,15 @@ public class GivenDataScheduling {
         hardConstraints.add(new NoDoubleResourceAllocation());
         Set<Constraint> softConstraints = new HashSet<Constraint>(1);
         softConstraints.add(new FulfilledDeadlines());
-        
+
         System.out.println("Creating Schedule for planning...");
-        ProcessPlanningProblem p = ProcessPlanningProblemLoader.getJsonResource(hardConstraints, softConstraints);
+        ProcessPlanningProblem p = ProcessPlanningProblemLoader
+                .getJsonResource(hardConstraints, softConstraints);
         Scheduler s = new SimpleFCFSScheduler();
-        
+
         Schedule schedule = s.createSchedule(p);
-        System.out.println("\nFinal schedule created:");
         if (schedule != null) {
+            System.out.println("\nFinal schedule created:");
             schedule.printSchedule();
         } else {
             System.out.println("No schedule was created");
