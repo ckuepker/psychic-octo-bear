@@ -19,45 +19,49 @@ import java.util.Set;
  * @author Christoph Küpker
  */
 public class SimpleFCFSScheduler implements Scheduler {
-    
+
     @Override
     public Schedule createSchedule(ProcessPlanningProblem s) {
-        Map<Resource, ResourceAllocationPlan> plans 
+        Map<Resource, ResourceAllocationPlan> plans
                 = new HashMap<Resource, ResourceAllocationPlan>();
         List<PlannedJob> completedJobs = new ArrayList<PlannedJob>();
         Set<Resource> resources = s.getResources();
         for (Resource r : resources) {
             plans.put(r, new ResourceAllocationPlan(r));
         }
-        for (Job j : s.getJobs()) {
-            int releaseTime = j.getStartDate();
-            Product p = j.getProduct();
-            Variation v = p.getVariations().iterator().next();
-            for (Operation o : v.getOperations()) {
-                ResourceTimePair requirement = o.getResources().iterator().next();
-                Resource r = requirement.getResource();
-                int duration = requirement.getTime();
-                System.out.println("Putting job "+j.getIdentifier()+" on machine "+r.getName()
-                        +" starting not before "+releaseTime+" running for "+duration);
-                releaseTime = plans.get(r).append(j, duration, releaseTime);
+        for (Job job : s.getJobs()) {
+            int releaseTime = job.getStartDate();
+            int amount = job.getAmount();
+            Product product = job.getProduct();
+            Variation variant = product.getVariations().iterator().next();
+
+            for (Operation operation : variant.getOperations()) {
+                ResourceTimePair requirement = operation.getResources().iterator().next();
+                Resource resource = requirement.getResource();
+                int duration = requirement.getTime() * amount;
+                System.out.println("Putting job " + job.getIdentifier() 
+                        + " on machine " + resource.getName() 
+                        + " starting not before " + releaseTime + " running for " 
+                        + duration + "(" + amount + " products to be created).");
+                releaseTime = plans.get(resource).append(job, duration, releaseTime);
             }
             // All operations planned. Add job as completed job to schedule
-            completedJobs.add(new PlannedJob(j, releaseTime));
+            completedJobs.add(new PlannedJob(job, releaseTime));
         }
-        Schedule schedule = new Schedule(new ArrayList<ResourceAllocationPlan>(plans.values()), 
+        Schedule schedule = new Schedule(new ArrayList<ResourceAllocationPlan>(plans.values()),
                 completedJobs);
         try {
             this.validateConstraints(schedule, s);
         } catch (HardConstraintViolatedException ex) {
             System.out.println("FAILURE: The following hard constraint was "
-                    + "violated:\t\n\t\""+ex.getMessage()+"\"\nNo Schedule will be "
+                    + "violated:\t\n\t\"" + ex.getMessage() + "\"\nNo Schedule will be "
                     + "created.");
             return null;
         }
         return schedule;
     }
-    
-    private void validateConstraints(Schedule schedule, ProcessPlanningProblem problem) 
+
+    private void validateConstraints(Schedule schedule, ProcessPlanningProblem problem)
             throws HardConstraintViolatedException {
         for (Constraint c : problem.getHardConstraints()) {
             if (!c.isValid(problem, schedule)) {
@@ -67,7 +71,7 @@ public class SimpleFCFSScheduler implements Scheduler {
         for (Constraint c : problem.getSoftConstraints()) {
             if (!c.isValid(problem, schedule)) {
                 System.out.println("WARNING: The following soft constraint is "
-                        + "being violated by the current schedule:\n\t"+c.getDescription());
+                        + "being violated by the current schedule:\n\t" + c.getDescription());
             }
         }
     }

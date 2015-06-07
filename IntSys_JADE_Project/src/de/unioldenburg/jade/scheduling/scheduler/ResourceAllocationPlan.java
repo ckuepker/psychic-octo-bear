@@ -60,10 +60,17 @@ public class ResourceAllocationPlan {
                 s += WAITING_SECOND_STRING;
                 time++;
             }
-            s += alloc.getJob().getIdentifier();
-            if (alloc.getJob().getIdentifier().length() == 2) {
+            int nameStringLength = 0;
+            String identifier = alloc.getJob().getIdentifier();
+            s += identifier;
+            nameStringLength += identifier.length();
+            if (alloc.getJob().getAmount() > 1) {
+                s += "*"+alloc.getJob().getAmount();
+                nameStringLength += 2;
+            }
+            if (nameStringLength == 2) {
                 s += "XX";
-            } else if (alloc.getJob().getIdentifier().length() == 3) {
+            } else if (nameStringLength == 3) {
                 s += "X";
             }
             for (int i = 0; i < alloc.getDuration() - 1; i++) {

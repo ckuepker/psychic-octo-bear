@@ -162,7 +162,7 @@ public class ExampleDataScheduling {
     
     public static List<Job> getJobs() {
         ArrayList<Job> jobs = new ArrayList<Job>(10);
-        jobs.add(new Job("A1", p1, 1, 0, 12));
+        jobs.add(new Job("A1", p1, 3, 0, 12));
         jobs.add(new Job("A2", p1, 1, 0, 27));
         jobs.add(new Job("A3", p2, 1, 0, 132));
         jobs.add(new Job("A4", p3, 1, 16, 52));
@@ -171,7 +171,7 @@ public class ExampleDataScheduling {
         jobs.add(new Job("A7", p3, 1, 18, 27));
         jobs.add(new Job("A8", p3, 1, 0, 12));
         jobs.add(new Job("A9", p1, 1, 17, 147));
-        jobs.add(new Job("A10", p2, 1, 12, 2048));
+        jobs.add(new Job("A10", p2, 7, 12, 2048));
         return jobs;
     }
     
