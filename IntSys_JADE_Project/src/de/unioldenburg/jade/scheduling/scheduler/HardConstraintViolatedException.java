@@ -1,6 +1,6 @@
 package de.unioldenburg.jade.scheduling.scheduler;
 
-import de.unioldenburg.jade.scheduling.Constraint;
+import de.unioldenburg.jade.scheduling.constraints.Constraint;
 
 /**
  *

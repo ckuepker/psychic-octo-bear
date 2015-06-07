@@ -1,5 +1,6 @@
 package de.unioldenburg.jade.scheduling;
 
+import de.unioldenburg.jade.scheduling.constraints.Constraint;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;

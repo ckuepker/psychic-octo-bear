@@ -3,12 +3,12 @@ package de.unioldenburg.jade.scheduling.examples.exc06;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.unioldenburg.jade.scheduling.Constraint;
+import de.unioldenburg.jade.scheduling.constraints.Constraint;
 import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import de.unioldenburg.jade.scheduling.ProcessPlanningProblemLoader;
-import de.unioldenburg.jade.scheduling.examples.exc05.constraints.AllJobsPlanned;
-import de.unioldenburg.jade.scheduling.examples.exc05.constraints.FulfilledDeadlines;
-import de.unioldenburg.jade.scheduling.examples.exc05.constraints.NoDoubleResourceAllocation;
+import de.unioldenburg.jade.scheduling.constraints.AllJobsPlanned;
+import de.unioldenburg.jade.scheduling.constraints.FulfilledDeadlines;
+import de.unioldenburg.jade.scheduling.constraints.NoDoubleResourceAllocation;
 import de.unioldenburg.jade.scheduling.scheduler.Schedule;
 import de.unioldenburg.jade.scheduling.scheduler.Scheduler;
 import de.unioldenburg.jade.scheduling.scheduler.SimpleFCFSScheduler;

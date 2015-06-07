@@ -1,5 +1,6 @@
 package de.unioldenburg.jade.scheduling.scheduler;
 
+import de.unioldenburg.jade.scheduling.Resource;
 import java.util.List;
 
 /**
@@ -38,6 +39,15 @@ public class Schedule {
 
     public List<ResourceAllocationPlan> getResourceAllocations() {
         return resourceAllocations;
+    }
+    
+    public ResourceAllocationPlan getResourceAllocation(Resource resource) {
+        for (ResourceAllocationPlan plan : resourceAllocations) {
+            if (plan.getResource().equals(resource)) {
+                return plan;
+            }
+        }
+        return null;
     }
 
     public List<PlannedJob> getPlannedJobs() {

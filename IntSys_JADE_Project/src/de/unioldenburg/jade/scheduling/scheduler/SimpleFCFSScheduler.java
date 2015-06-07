@@ -1,6 +1,6 @@
 package de.unioldenburg.jade.scheduling.scheduler;
 
-import de.unioldenburg.jade.scheduling.Constraint;
+import de.unioldenburg.jade.scheduling.constraints.Constraint;
 import de.unioldenburg.jade.scheduling.Job;
 import de.unioldenburg.jade.scheduling.Operation;
 import de.unioldenburg.jade.scheduling.Product;
@@ -33,9 +33,9 @@ public class SimpleFCFSScheduler implements Scheduler {
             int releaseTime = job.getStartDate();
             int amount = job.getAmount();
             Product product = job.getProduct();
-            Variation variant = product.getVariations().iterator().next();
+            Variation variation = product.getVariations().iterator().next();
 
-            for (Operation operation : variant.getOperations()) {
+            for (Operation operation : variation.getOperations()) {
                 ResourceTimePair requirement = operation.getResources().iterator().next();
                 Resource resource = requirement.getResource();
                 int duration = requirement.getTime() * amount;
@@ -43,10 +43,11 @@ public class SimpleFCFSScheduler implements Scheduler {
                         + " on machine " + resource.getName() 
                         + " starting not before " + releaseTime + " running for " 
                         + duration + "(" + amount + " products to be created).");
-                releaseTime = plans.get(resource).append(job, duration, releaseTime);
+                releaseTime = plans.get(resource).append(job, variation, 
+                        operation, duration, releaseTime);
             }
             // All operations planned. Add job as completed job to schedule
-            completedJobs.add(new PlannedJob(job, releaseTime));
+            completedJobs.add(new PlannedJob(job, releaseTime, variation));
         }
         Schedule schedule = new Schedule(new ArrayList<ResourceAllocationPlan>(plans.values()),
                 completedJobs);

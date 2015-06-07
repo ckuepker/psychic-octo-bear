@@ -1,6 +1,5 @@
-package de.unioldenburg.jade.scheduling.examples.exc05.constraints;
+package de.unioldenburg.jade.scheduling.constraints;
 
-import de.unioldenburg.jade.scheduling.Constraint;
 import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import de.unioldenburg.jade.scheduling.scheduler.JobToResourceAllocation;
 import de.unioldenburg.jade.scheduling.scheduler.ResourceAllocationPlan;
@@ -18,10 +17,10 @@ public class NoDoubleResourceAllocation extends Constraint {
         for (ResourceAllocationPlan allocation : schedule.getResourceAllocations()) {
             int allocationReleaseTime = 0;
             for (JobToResourceAllocation job : allocation.getJobs()) {
-                if (job.getStartTime() < allocationReleaseTime) {
+                if (job.getStarttime() < allocationReleaseTime) {
                     return false;
                 }
-                allocationReleaseTime = job.getStartTime() + job.getDuration();
+                allocationReleaseTime = job.getStarttime() + job.getDuration();
             }
         }
         return true;

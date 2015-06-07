@@ -1,7 +1,9 @@
 package de.unioldenburg.jade.scheduling.scheduler;
 
 import de.unioldenburg.jade.scheduling.Job;
+import de.unioldenburg.jade.scheduling.Operation;
 import de.unioldenburg.jade.scheduling.Resource;
+import de.unioldenburg.jade.scheduling.Variation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,8 @@ public class ResourceAllocationPlan {
      * @return Time after the job is completed on this resource 
      * ([postponement+]releaseTime+duration)
      */
-    public int append(Job job, int duration, int releaseTime) {
+    public int append(Job job, Variation variation, Operation operation, 
+            int duration, int releaseTime) {
         if (time < releaseTime) {
             System.out.println(resource.getName()+": Fast forwarding to "+releaseTime);
             time = releaseTime;
@@ -38,7 +41,8 @@ public class ResourceAllocationPlan {
             System.out.println(resource.getName()+": Postponing "+job.getIdentifier()
                     + " to "+time+" because machine is busy");
         }
-        jobs.add(new JobToResourceAllocation(job, duration, time));
+        jobs.add(new JobToResourceAllocation(job, variation, operation, 
+                duration, time));
         time += duration;
         return time;
     }
@@ -56,7 +60,7 @@ public class ResourceAllocationPlan {
         String s = resource.getName()+": ";
         int time = 0;
         for (JobToResourceAllocation alloc : this.jobs) {
-            while (time < alloc.getStartTime()) {
+            while (time < alloc.getStarttime()) {
                 s += WAITING_SECOND_STRING;
                 time++;
             }

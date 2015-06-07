@@ -1,5 +1,6 @@
 package de.unioldenburg.jade.scheduling;
 
+import de.unioldenburg.jade.scheduling.constraints.Constraint;
 import java.util.List;
 import java.util.Set;
 

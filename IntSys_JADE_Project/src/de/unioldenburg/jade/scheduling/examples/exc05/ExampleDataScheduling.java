@@ -1,6 +1,6 @@
 package de.unioldenburg.jade.scheduling.examples.exc05;
 
-import de.unioldenburg.jade.scheduling.Constraint;
+import de.unioldenburg.jade.scheduling.constraints.Constraint;
 import de.unioldenburg.jade.scheduling.Job;
 import de.unioldenburg.jade.scheduling.Operation;
 import de.unioldenburg.jade.scheduling.Product;
@@ -8,9 +8,10 @@ import de.unioldenburg.jade.scheduling.Resource;
 import de.unioldenburg.jade.scheduling.ResourceTimePair;
 import de.unioldenburg.jade.scheduling.ProcessPlanningProblem;
 import de.unioldenburg.jade.scheduling.Variation;
-import de.unioldenburg.jade.scheduling.examples.exc05.constraints.AllJobsPlanned;
-import de.unioldenburg.jade.scheduling.examples.exc05.constraints.FulfilledDeadlines;
-import de.unioldenburg.jade.scheduling.examples.exc05.constraints.NoDoubleResourceAllocation;
+import de.unioldenburg.jade.scheduling.constraints.AllJobsPlanned;
+import de.unioldenburg.jade.scheduling.constraints.FulfilledDeadlines;
+import de.unioldenburg.jade.scheduling.constraints.NoDoubleResourceAllocation;
+import de.unioldenburg.jade.scheduling.constraints.ProductionOrderRespectedConstraint;
 import de.unioldenburg.jade.scheduling.scheduler.Schedule;
 import de.unioldenburg.jade.scheduling.scheduler.Scheduler;
 import de.unioldenburg.jade.scheduling.scheduler.SimpleFCFSScheduler;
@@ -127,6 +128,7 @@ public class ExampleDataScheduling {
         Set<Constraint> hardConstraints = new HashSet<Constraint>(3);
         hardConstraints.add(new AllJobsPlanned());
         hardConstraints.add(new NoDoubleResourceAllocation());
+        hardConstraints.add(new ProductionOrderRespectedConstraint());
         Set<Constraint> softConstraints = new HashSet<Constraint>(1);
         softConstraints.add(new FulfilledDeadlines());
         
@@ -135,11 +137,11 @@ public class ExampleDataScheduling {
                 resources, hardConstraints, softConstraints);
         Scheduler s = new SimpleFCFSScheduler();
         Schedule schedule = s.createSchedule(p);
-        System.out.println("\nFinal schedule created:");
         if (schedule != null) {
+            System.out.println("\nDONE: Final schedule created:");
             schedule.printSchedule();
         } else {
-            System.out.println("No schedule was created");
+            System.out.println("DONE: No schedule was created");
         }
     }
     
